@@ -1,0 +1,264 @@
+{
+  "generadoEn": "2026-11-14T04:03:18.012Z",
+  "motor": "MongoDB 7.0.14 replica set real temporal; Express; Supertest; node:test",
+  "casos": [
+    {
+      "caso": "Salud de la API",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Rechazar acceso sin token",
+      "esperado": 401,
+      "recibido": 401,
+      "correcto": true
+    },
+    {
+      "caso": "Cliente no crea usuarios",
+      "esperado": 403,
+      "recibido": 403,
+      "correcto": true
+    },
+    {
+      "caso": "Rechazar bicicleta inválida",
+      "esperado": 400,
+      "recibido": 400,
+      "correcto": true
+    },
+    {
+      "caso": "Registrar bicicleta de montaña",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Crear servicio",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Crear repuesto",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Solicitar cita",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Rechazar cita activa duplicada",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Confirmar y reprogramar cita",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Recibir bicicleta con cita",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Rechazar segunda orden activa",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Registrar diagnóstico",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Crear trabajo propuesto",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Consultar total de propuesta",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear ejecución pendiente",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Autorizar trabajo",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear cambio de decisión",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Iniciar ejecución autorizada",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear entrega prematura",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear valoración anticipada",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear sobrecosto no autorizado",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Finalizar trabajo",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Proponer intervención adicional",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Rechazar trabajo adicional",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear ejecución rechazada",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Cambiar catálogo sin cambiar historial",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Comprobar presupuesto histórico",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Revisión individual del trabajo",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Bloquear lista sin revisión de entrega",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Aprobar revisión de entrega",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Marcar lista para entrega",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Entregar bicicleta",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Registrar valoración",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Rechazar valoración duplicada",
+      "esperado": 409,
+      "recibido": 409,
+      "correcto": true
+    },
+    {
+      "caso": "Registrar garantía",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Reportar inconveniente en garantía",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Resolver garantía",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Consultar historial",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Consultar estadísticas",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    },
+    {
+      "caso": "Cliente no consulta estadísticas globales",
+      "esperado": 403,
+      "recibido": 403,
+      "correcto": true
+    },
+    {
+      "caso": "Nueva recepción sin cita tras entrega",
+      "esperado": 201,
+      "recibido": 201,
+      "correcto": true
+    },
+    {
+      "caso": "Cancelar segunda orden",
+      "esperado": 200,
+      "recibido": 200,
+      "correcto": true
+    }
+  ]
+}

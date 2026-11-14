@@ -1,0 +1,29 @@
+{
+  "name": "taller-bicicletas-bd2",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --watch --env-file-if-exists=.env src/server.js",
+    "db:init": "node --env-file-if-exists=.env scripts/init-db.js",
+    "seed": "node --env-file-if-exists=.env scripts/seed.js",
+    "demo": "node scripts/demo.js",
+    "test": "node --test --test-concurrency=1 test/*.test.js",
+    "test:postman": "node scripts/test-postman.js",
+    "artifacts": "node scripts/generate-artifacts.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.3.0",
+    "newman": "^6.2.3",
+    "supertest": "^7.1.0"
+  }
+}

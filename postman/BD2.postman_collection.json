@@ -1,0 +1,1565 @@
+{
+  "info": {
+    "name": "BD2 - Taller de bicicletas - Entrega 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ejecutar en orden con usuarios de npm run seed o npm run demo. Usar una base nueva para repetir la secuencia. Contiene pruebas positivas y negativas."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000/api"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.collectionVariables.get('futuro')) {",
+          "  const now = Date.now();",
+          "  pm.collectionVariables.set('futuro', new Date(now + 86400000).toISOString());",
+          "  pm.collectionVariables.set('futuro2', new Date(now + 172800000).toISOString());",
+          "  pm.collectionVariables.set('entregaEstimada', new Date(now + 604800000).toISOString());",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Salud de la API",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/salud"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Rechazar acceso sin token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Cliente no crea usuarios",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/usuarios",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Rechazar bicicleta inválida",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/bicicletas",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Registrar bicicleta de montaña",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/bicicletas",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"propietarioId\": \"{{clienteId}}\",\n  \"marca\": \"Trek\",\n  \"modelo\": \"Marlin\",\n  \"tipo\": \"montana\",\n  \"color\": \"Azul\",\n  \"caracteristicas\": {\n    \"material\": \"Aluminio\",\n    \"suspension\": {\n      \"informacion\": \"Delantera\",\n      \"recorrido\": 100\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('bicicletaId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Crear servicio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/servicios",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Ajuste de frenos\",\n  \"categoria\": \"frenos\",\n  \"descripcion\": \"Ajuste y revisión de frenado\",\n  \"duracionEstimada\": 45,\n  \"precioReferencia\": 30000,\n  \"tareasHabituales\": [\n    {\n      \"nombre\": \"Ajustar\",\n      \"descripcion\": \"Regular tensión\"\n    }\n  ],\n  \"recomendacionesGenerales\": [\n    \"Revisar desgaste\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('servicioId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 Crear repuesto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/repuestos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Pastillas\",\n  \"especificaciones\": \"Compatibles con freno de disco\",\n  \"precio\": 20000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('repuestoId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Solicitar cita",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/citas",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"bicicletaId\": \"{{bicicletaId}}\",\n  \"fechaHora\": \"{{futuro}}\",\n  \"motivo\": \"Revisar frenos\",\n  \"problemasObservados\": \"Ruido al frenar\",\n  \"serviciosInteres\": [\n    \"{{servicioId}}\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('citaId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 Rechazar cita activa duplicada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/citas",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"bicicletaId\": \"{{bicicletaId}}\",\n  \"fechaHora\": \"{{futuro}}\",\n  \"motivo\": \"Revisar frenos\",\n  \"problemasObservados\": \"Ruido\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 Confirmar y reprogramar cita",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/citas/{{citaId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"confirmada\",\n  \"fechaHora\": \"{{futuro2}}\",\n  \"observacionCambio\": \"Disponibilidad confirmada por coordinador\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 Recibir bicicleta con cita",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"bicicletaId\": \"{{bicicletaId}}\",\n  \"citaId\": \"{{citaId}}\",\n  \"fechaEstimadaEntrega\": \"{{entregaEstimada}}\",\n  \"tecnicosAsignados\": [\n    \"{{tecnicoId}}\"\n  ],\n  \"recepcion\": {\n    \"problemaReportado\": \"Ruido al frenar\",\n    \"condicionesObservadas\": \"Desgaste de pastillas\",\n    \"accesorios\": [\n      \"Luz delantera\"\n    ],\n    \"fotografias\": [\n      {\n        \"nombreArchivo\": \"freno.jpg\",\n        \"descripcion\": \"Estado inicial del freno\",\n        \"ubicacion\": \"/evidencias/freno.jpg\"\n      }\n    ]\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('ordenId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 Rechazar segunda orden activa",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"bicicletaId\": \"{{bicicletaId}}\",\n  \"fechaEstimadaEntrega\": \"{{entregaEstimada}}\",\n  \"tecnicosAsignados\": [\n    \"{{tecnicoId}}\"\n  ],\n  \"recepcion\": {\n    \"problemaReportado\": \"Ruido\",\n    \"condicionesObservadas\": \"Usada\",\n    \"accesorios\": []\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 Registrar diagnóstico",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/diagnostico",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"hallazgos\": [\n    {\n      \"componente\": \"Freno delantero\",\n      \"condicion\": \"Desgastado\",\n      \"descripcion\": \"Pastillas agotadas\",\n      \"prioridad\": \"alta\",\n      \"observaciones\": \"Requiere sustitución\",\n      \"accionesRecomendadas\": [\n        \"Cambiar pastillas\"\n      ]\n    }\n  ],\n  \"evidencias\": [\n    {\n      \"nombreArchivo\": \"diagnostico.jpg\",\n      \"descripcion\": \"Desgaste encontrado\",\n      \"ubicacion\": \"/evidencias/diagnostico.jpg\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 Crear trabajo propuesto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/trabajos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"servicioId\": \"{{servicioId}}\",\n  \"descripcionIntervencion\": \"Cambiar pastillas y ajustar freno\",\n  \"componente\": \"Freno delantero\",\n  \"manoObraEstimada\": 30000,\n  \"repuestosPrevistos\": [\n    {\n      \"repuestoId\": \"{{repuestoId}}\",\n      \"cantidad\": 2,\n      \"precioUnitarioEstimado\": 20000\n    }\n  ],\n  \"observaciones\": \"Presupuesto sujeto a autorización\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('trabajoId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 Consultar total de propuesta",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/propuesta"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('totalEstimado', () => pm.expect(pm.response.json().totalEstimado).to.eql(70000));",
+              "pm.test('totalAutorizado', () => pm.expect(pm.response.json().totalAutorizado).to.eql(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 Bloquear ejecución pendiente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/ejecucion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"en ejecucion\",\n  \"descripcionRealizada\": \"Inicio\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 Autorizar trabajo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/autorizacion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"autorizado\",\n  \"comentarios\": \"Acepto presupuesto\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 Bloquear cambio de decisión",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/autorizacion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"rechazado\",\n  \"comentarios\": \"Cambio\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 Iniciar ejecución autorizada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/ejecucion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"en ejecucion\",\n  \"descripcionRealizada\": \"Desmontaje y limpieza\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 Bloquear entrega prematura",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"lista para entrega\",\n  \"observacion\": \"Intento prematuro\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 Bloquear valoración anticipada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/valoracion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calificacion\": 5,\n  \"comentarios\": \"Bien\",\n  \"sugerencias\": \"Continuar\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22 Bloquear sobrecosto no autorizado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/ejecucion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"finalizado\",\n  \"descripcionRealizada\": \"Cambio de pastillas\",\n  \"repuestosUtilizados\": [\n    {\n      \"repuestoId\": \"{{repuestoId}}\",\n      \"cantidad\": 3,\n      \"precioUnitarioAplicado\": 20000\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23 Finalizar trabajo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/ejecucion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"finalizado\",\n  \"descripcionRealizada\": \"Pastillas sustituidas y freno ajustado\",\n  \"repuestosUtilizados\": [\n    {\n      \"repuestoId\": \"{{repuestoId}}\",\n      \"cantidad\": 2,\n      \"precioUnitarioAplicado\": 19000\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24 Proponer intervención adicional",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/trabajos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"descripcionIntervencion\": \"Ajustar transmisión\",\n  \"componente\": \"Cambio trasero\",\n  \"manoObraEstimada\": 15000,\n  \"observaciones\": \"Intervención adicional requiere decisión\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('trabajoAdicionalId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25 Rechazar trabajo adicional",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoAdicionalId}}/autorizacion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"rechazado\",\n  \"comentarios\": \"Lo haré en otra visita\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26 Bloquear ejecución rechazada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoAdicionalId}}/ejecucion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"en ejecucion\",\n  \"descripcionRealizada\": \"Inicio no permitido\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27 Cambiar catálogo sin cambiar historial",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/repuestos/{{repuestoId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Pastillas nuevo catálogo\",\n  \"precio\": 50000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28 Comprobar presupuesto histórico",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/propuesta"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "pm.test('totalAutorizado', () => pm.expect(pm.response.json().totalAutorizado).to.eql(70000));",
+              "pm.test('totalEstimado', () => pm.expect(pm.response.json().totalEstimado).to.eql(85000));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29 Revisión individual del trabajo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/revision",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"puntosVerificados\": [\n    {\n      \"punto\": \"Frenado\",\n      \"resultado\": \"Correcto\"\n    }\n  ],\n  \"resultado\": \"Prueba superada\",\n  \"aprobada\": true,\n  \"recomendaciones\": [\n    \"Revisar periódicamente\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30 Bloquear lista sin revisión de entrega",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"lista para entrega\",\n  \"observacion\": \"Falta revisión global\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31 Aprobar revisión de entrega",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tecnicoToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/revision",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"puntosVerificados\": [\n    {\n      \"punto\": \"Frenado\",\n      \"resultado\": \"Correcto\"\n    },\n    {\n      \"punto\": \"Accesorios\",\n      \"resultado\": \"Completos\"\n    }\n  ],\n  \"resultado\": \"Bicicleta revisada\",\n  \"aprobada\": true,\n  \"recomendaciones\": [\n    \"Revisar desgaste mensualmente\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32 Marcar lista para entrega",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"lista para entrega\",\n  \"observacion\": \"Revisión aprobada\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "33 Entregar bicicleta",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/entrega",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"confirmacionRecepcionCliente\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+              "if (pm.response.code === 200) pm.collectionVariables.set('fechaEntrega', pm.response.json().entrega.fecha);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "34 Registrar valoración",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/valoracion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calificacion\": 5,\n  \"comentarios\": \"Buen servicio\",\n  \"sugerencias\": \"Conservar la atención\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "35 Rechazar valoración duplicada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenId}}/valoracion",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"calificacion\": 4,\n  \"comentarios\": \"Otra\",\n  \"sugerencias\": \"Ninguna\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "36 Registrar garantía",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trabajos/{{trabajoId}}/garantia",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"duracion\": 30,\n  \"fechaInicio\": \"{{fechaEntrega}}\",\n  \"condiciones\": \"Defectos del servicio aplicado\",\n  \"exclusiones\": \"Golpes y desgaste normal\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "37 Reportar inconveniente en garantía",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/garantias/solicitudes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"trabajoId\": \"{{trabajoId}}\",\n  \"descripcion\": \"Reapareció ruido\",\n  \"evidencias\": [\n    {\n      \"nombreArchivo\": \"ruido.txt\",\n      \"descripcion\": \"Descripción del inconveniente\",\n      \"ubicacion\": \"/evidencias/ruido.txt\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('solicitudId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "38 Resolver garantía",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/garantias/solicitudes/{{solicitudId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"resuelta\",\n  \"procede\": true,\n  \"solucionAplicada\": \"Ajuste de asentamiento realizado\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "39 Consultar historial",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/bicicletas/{{bicicletaId}}/historial"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "40 Consultar estadísticas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/estadisticas"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "41 Cliente no consulta estadísticas globales",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clienteToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/estadisticas"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "42 Nueva recepción sin cita tras entrega",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"bicicletaId\": \"{{bicicletaId}}\",\n  \"fechaEstimadaEntrega\": \"{{entregaEstimada}}\",\n  \"tecnicosAsignados\": [\n    \"{{tecnicoId}}\"\n  ],\n  \"recepcion\": {\n    \"problemaReportado\": \"Nueva revisión\",\n    \"condicionesObservadas\": \"Uso habitual\",\n    \"accesorios\": []\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('ordenSinCitaId', pm.response.json()._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "43 Cancelar segunda orden",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{coordinadorToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ordenes/{{ordenSinCitaId}}/estado",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"cancelada\",\n  \"observacion\": \"Cliente desiste antes del diagnóstico\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

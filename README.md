@@ -67,4 +67,4 @@ La autenticación con tokens Bearer sirve para demostrar y aplicar los permisos 
 
 ## Documentación
 
-Leer `docs/01-alcance-y-requisitos.md`, `02-modelado-base.md`, `03-implementacion.md`, `04-api.md`, `05-documentos-y-consultas.md`, `06-pruebas.md` y `07-sustentacion-y-entrega.md` en ese orden. Son archivos Markdown listos para incorporarse a GitHub Wiki. No se ha publicado en un repositorio remoto ni se han atribuido contribuciones ficticias a integrantes.
+Leer `docs/01-alcance-y-requisitos.md`, `02-modelado-base.md`, `03-implementacion.md`, `04-api.md`, `05-documentos-y-consultas.md`, `06-pruebas.md` y `07-sustentacion-y-entrega.md` en ese orden. Son archivos Markdown listos para incorporarse a GitHub Wiki. Repositorio privado: [Andre2444/proyecto-bd2-taller-bicicletas](https://github.com/Andre2444/proyecto-bd2-taller-bicicletas). La documentación está en `docs/`; no se ha publicado como Wiki ni se han atribuido contribuciones ficticias a integrantes.

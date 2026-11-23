@@ -2,7 +2,7 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import request from 'supertest';
-import { MongoMemoryReplSet } from 'mongodb-memory-server';
+import { iniciarMongoTemporal } from '../scripts/mongo-temporal.js';
 import { MongoClient, ObjectId, BSON } from 'mongodb';
 import { initDb } from '../src/db.js';
 import { createApp } from '../src/app.js';
@@ -12,7 +12,7 @@ let repl, client, db, app;
 const vars = {};
 const results = [];
 before(async () => {
-  repl = await MongoMemoryReplSet.create({ replSet: { count: 1 }, binary: { version: '7.0.14', downloadDir: '.local/mongodb-binaries' } });
+  repl = await iniciarMongoTemporal();
   client = new MongoClient(repl.getUri()); await client.connect(); db = client.db('test_bd2'); await initDb(db); app = createApp(db, client);
   for (const rol of ['coordinador', 'tecnico', 'cliente']) {
     const u = await createUser(db, { nombreCompleto: rol, documento: rol, correo: rol + '@example.test', telefono: '3000000000', rol });
@@ -22,7 +22,7 @@ before(async () => {
 }, { timeout: 240000 });
 after(async () => {
   await mkdir('docs/evidencias', { recursive: true });
-  await writeFile('docs/evidencias/resultados-http.json', JSON.stringify({ generadoEn: new Date().toISOString(), motor: 'MongoDB 7.0.14 replica set real temporal; Express; Supertest; node:test', casos: results }, null, 2));
+  await writeFile('docs/evidencias/resultados-http.json', JSON.stringify({ generadoEn: new Date().toISOString(), motor: 'MongoDB temporal con replica set, Express y Supertest', casos: results }, null, 2));
   await client?.close(); await repl?.stop();
 });
 const substitute = value => JSON.parse(JSON.stringify(value).replace(/\{\{(\w+)\}\}/g, (_m, key) => { assert.ok(vars[key], `Falta variable ${key}`); return vars[key]; }));

@@ -6,7 +6,7 @@ Este proyecto se basa en el enunciado del curso de Bases de Datos 2 y en la prim
 
 La segunda entrega, prevista en el enunciado para el 26 de noviembre de 2026, comprende API REST, pruebas funcionales y documentación del modelado, esquema, creación de documentos y consultas. También requiere sustentación presencial. No requiere frontend, inventario, facturación ni procesamiento de pagos.
 
-La base de datos debe ser MongoDB, con un esquema moderado que permita extender documentos y controle los errores de inserción. El lenguaje y framework deben ser los indicados por el docente: el PDF no los identifica. Tras la indicación del estudiante de que cree que se usa JavaScript, se implementó con JavaScript y Express; queda pendiente confirmar esa elección con el docente.
+La base de datos debe ser MongoDB, con un esquema moderado que permita extender documentos y controle los errores de inserción. El PDF no identifica el lenguaje ni el framework; para la entrega se usa Java con Spring Boot, según la aclaración posterior del estudiante sobre lo solicitado en clase.
 
 ## Correspondencia entre requisitos y modelo entregado
 

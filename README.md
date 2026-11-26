@@ -1,70 +1,65 @@
 # Proyecto BD2 - Entrega 2
 
-API REST para un taller de mantenimiento y reparación de bicicletas de Cali. Implementación en **JavaScript, Express y MongoDB**, basada en las ocho colecciones del diagrama de Hackolade de la primera entrega.
+API REST para un taller de mantenimiento y reparación de bicicletas de Cali. Implementación de entrega en **Java 21, Spring Boot y MongoDB**, basada en las ocho colecciones del modelado de Hackolade de la primera entrega.
 
-**Decisión pendiente del curso:** el PDF exige el lenguaje y framework definidos por el docente, pero no los nombra. Se eligió JavaScript con Express a partir de la indicación del estudiante. Esta elección debe confirmarse con el docente; no se presenta como una exigencia del PDF.
+La versión Express/Node se conserva como historial de desarrollo y sus pruebas de referencia. Para la entrega y ejecución usa Spring Boot (`src/main/java`).
 
-## Inicio rápido: demostración temporal
+## Inicio rápido
 
-Requiere Node.js 22.9 o posterior, npm y conexión a Internet para la primera descarga. En Windows, si PowerShell bloquea `npm.ps1`, usar `npm.cmd` en lugar de `npm`.
+Para ejecutar requiere Java 21, Docker Desktop y conexión a Internet para la primera descarga de dependencias. Node.js se requiere para preparar la base y correr las pruebas repetibles. Inicia Docker Desktop y desde una terminal en la carpeta del proyecto ejecuta:
+
+```powershell
+docker compose up -d
+.\mvnw.cmd spring-boot:run
+```
+
+La API inicia en `http://127.0.0.1:3000/api` y MongoDB conserva sus datos en un volumen Docker. La primera vez que no existan usuarios, la aplicación crea un coordinador, técnico y cliente de demostración e imprime sus IDs y tokens en la terminal. Copia los valores a las variables del entorno local de Postman. Se muestran una sola vez; no compartas ni publiques esos tokens.
+
+Importa `postman/BD2.postman_collection.json` y `postman/local.postman_environment.json`. Ejecuta los requests en orden con Collection Runner. Algunas respuestas 400, 403 y 409 son resultados esperados de las pruebas negativas.
+
+## MongoDB y datos
+
+El contenedor usa un replica set porque las operaciones del flujo actualizan más de un documento en una transacción. También puedes usar MongoDB Atlas o un replica set compatible. Un `mongod` standalone no soporta transacciones.
+
+La configuración Docker enlaza MongoDB solo a `127.0.0.1:27017`. En la base destinada al proyecto instala índices y validadores con:
 
 ```powershell
 npm ci
-npm run demo
+npm.cmd run db:init
 ```
 
-Se inicia un MongoDB real temporal en un replica set de un nodo y la API en `http://127.0.0.1:3000/api`. La primera ejecución descarga MongoDB 7.0.14 (en Windows la descarga puede superar 590 MB). Esta opción es para demostración: los datos no se conservan al terminar. No requiere Docker.
+Este comando no elimina documentos. Configura `MONGODB_URI` y `MONGODB_DB` para usar otros valores.
 
-1. Abrir Postman e importar `postman/BD2.postman_collection.json`.
-2. Importar y seleccionar `.local/postman-entorno.json`, creado al iniciar la demo.
-3. Ejecutar los **43 requests en orden**, con Collection Runner y una iteración.
-4. Revisar los tests: algunos requests esperan deliberadamente 400, 401, 403 o 409.
-5. Para repetir desde cero, terminar la demo, iniciarla otra vez, volver a importar el entorno y borrar los valores actuales de las variables de la colección. No ejecutar la colección dos veces sobre los mismos datos.
+## Pruebas
 
-## Ejecución con datos persistentes
-
-Requiere Docker Desktop iniciado con contenedores Linux, o un MongoDB compatible con transacciones (replica set/Atlas). Un `mongod` standalone no permite las transacciones usadas aquí.
+Con Node.js instalado, el runner inicia su propio MongoDB temporal; no requiere Docker para probar. Compila previamente el JAR y ejecuta la colección contra Spring Boot:
 
 ```powershell
 npm ci
-Copy-Item .env.example .env
-docker compose up -d --wait
-npm run db:init
-npm run seed
-npm start
+.\mvnw.cmd compile
+.\mvnw.cmd jar:jar spring-boot:repackage
+npm run test:spring
 ```
 
-`npm run seed` crea tres usuarios de demostración y se niega a ejecutarse si ya existen usuarios. Los tokens se entregan en `.local/credenciales-demo.json` y en el entorno Postman local. No se imprimen ni se incluyen en Git. El coordinador puede crear más usuarios con `POST /api/usuarios`, que devuelve su token una sola vez.
+El script inicia la aplicación y un replica set temporal, corre 43 solicitudes con 47 aserciones y guarda el resultado sin tokens en `docs/evidencias/resultados-spring-postman.json`. Las pruebas `npm test` y `npm run test:postman` corresponden a la implementación Express previa.
 
-La configuración Docker es exclusivamente local: el puerto de MongoDB está enlazado a `127.0.0.1`. Para una base existente o Atlas, modificar `MONGODB_URI` y `MONGODB_DB` en `.env`. `db:init` instala validadores e índices; debe aplicarse sobre una base destinada a este proyecto. No elimina documentos.
+## Contenido
 
-## Pruebas automatizadas
-
-```powershell
-npm test
-npm run test:postman
-```
-
-Las pruebas levantan una base MongoDB real y aislada. Incluyen los mismos 43 casos de Postman y verificaciones adicionales de validación directa, permisos, conservación histórica, duplicados concurrentes, garantía vencida y datos mal formados. La ejecución escribe `docs/evidencias/resultados-http.json`. El segundo comando ejecuta la colección con Newman y guarda `docs/evidencias/resultados-postman.json`. El resultado de la suite completa se documenta en `docs/06-pruebas.md`.
-
-## Contenido de la entrega
-
-| Ruta | Contenido |
-| --- | --- |
-| `src/` | API, validaciones, permisos y esquema de MongoDB. |
-| `scripts/` | Inicialización, usuarios de ejemplo, demo y generación de artefactos. |
-| `database/` | Esquemas exportados, creación de colecciones y consultas de ejemplo. |
-| `postman/` | Colección con pruebas y entorno sin secretos. |
-| `test/` | Pruebas HTTP, integridad y concurrencia. |
-| `docs/` | Requisitos, modelado, implementación, API, pruebas y sustentación. |
-| `docs/referencias/` | PDF original e imagen original del modelado. |
+- `src/main/`: API Spring Boot, conexión MongoDB, autenticación y errores.
+- `database/`: esquemas MongoDB, creación de colecciones y consultas de ejemplo.
+- `postman/`: colección de 43 pruebas y entorno sin credenciales.
+- `scripts/test-spring-postman.js`: ejecución repetible de Postman contra Spring Boot.
+- `src/` y `test/`: implementación Express previa y pruebas de referencia.
+- `docs/`: requisitos, modelado, implementación, contrato API, consultas, pruebas y sustentación.
+- `docs/referencias/`: PDF del curso y modelado original.
 
 ## Alcance
 
-Incluye clientes, técnicos, coordinadores, bicicletas, catálogo, citas, recepción, diagnóstico, propuestas, autorizaciones, ejecución, revisión, entrega, garantías, valoraciones, historial y estadísticas. No incluye frontend, inventario, facturación ni pagos.
+Incluye clientes, técnicos, coordinadores, bicicletas, catálogos, citas, recepción, diagnóstico, propuestas, autorizaciones, ejecución, revisión, entrega, garantías, valoraciones, historial y estadísticas. No incluye frontend, inventario, facturación ni pagos.
 
-La autenticación con tokens Bearer sirve para demostrar y aplicar los permisos de los tres roles. Los archivos adjuntos se registran por nombre, descripción y ubicación; no se implementa almacenamiento ni carga de archivos, que el enunciado no exige.
+Los adjuntos se registran por nombre, descripción y ubicación. El enunciado no requiere almacenar archivos.
 
-## Documentación
+## Documentación y repositorio
 
-Leer `docs/01-alcance-y-requisitos.md`, `02-modelado-base.md`, `03-implementacion.md`, `04-api.md`, `05-documentos-y-consultas.md`, `06-pruebas.md` y `07-sustentacion-y-entrega.md` en ese orden. Son archivos Markdown listos para incorporarse a GitHub Wiki. Repositorio privado: [Andre2444/proyecto-bd2-taller-bicicletas](https://github.com/Andre2444/proyecto-bd2-taller-bicicletas). La documentación está en `docs/`; no se ha publicado como Wiki ni se han atribuido contribuciones ficticias a integrantes.
+Lee `docs/01-alcance-y-requisitos.md`, `02-modelado-base.md`, `03-implementacion.md`, `04-api.md`, `05-documentos-y-consultas.md`, `06-pruebas.md` y `07-sustentacion-y-entrega.md` en ese orden. Repositorio privado: [Andre2444/proyecto-bd2-taller-bicicletas](https://github.com/Andre2444/proyecto-bd2-taller-bicicletas). La documentación está en `docs/`; no se ha publicado como Wiki ni se han atribuido contribuciones ficticias a integrantes.
+

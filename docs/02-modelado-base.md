@@ -72,4 +72,4 @@ Estos ajustes complementan el modelo para cubrir el enunciado; no introducen inv
 
 ## Estado de este documento
 
-Documento de análisis basado en las fuentes. La transcripción ejecutable se encuentra en `src/db.js` y `database/esquemas.mongodb.json`; los índices y ajustes implementados se explican en `03-implementacion.md`, las rutas en `04-api.md` y las consultas en `05-documentos-y-consultas.md`. La tecnología elegida es JavaScript con Express, pendiente de confirmación con el docente.
+Documento de análisis basado en las fuentes. Los esquemas e índices de MongoDB están en `src/db.js` y `database/esquemas.mongodb.json`; la API de entrega está implementada con Java y Spring Boot en `src/main/java`. Las rutas y consultas se explican en `04-api.md` y `05-documentos-y-consultas.md`.

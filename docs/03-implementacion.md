@@ -2,7 +2,7 @@
 
 ## Arquitectura
 
-Las peticiones HTTP llegan a Express, que interpreta JSON, autentica el token, verifica rol y propiedad, valida campos con Zod y ejecuta las reglas de negocio. El driver oficial de MongoDB persiste los documentos. Los validadores `$jsonSchema` de MongoDB son una segunda barrera para inserciones directas. `src/app.js` concentra las rutas y las operaciones del dominio; `src/validation.js` define entradas; `src/db.js` contiene esquemas e índices; `src/auth.js` contiene identidad y permisos.
+La implementación elegida para el curso es Java 21 con Spring Boot 3.5 y Spring Data MongoDB. `TallerApplication` inicia la aplicación, `ApiController` recibe las rutas REST y usa `MongoTemplate` para leer y escribir documentos; `ApiException` y `ApiErrors` traducen excepciones a respuestas HTTP. La aplicación conserva las ocho colecciones. Los validadores `$jsonSchema` y los índices de `src/db.js` provienen del trabajo Node anterior y se pueden instalar con `npm.cmd run db:init`.
 
 La implementación conserva `usuarios`, `bicicletas`, `servicios`, `repuestos`, `citas`, `ordenesServicio`, `trabajosOrden` y `solicitudesGarantia`. No crea tablas relacionales ni colecciones de inventario o facturas.
 
@@ -52,9 +52,9 @@ La entrega requiere estado listo y confirmación de recepción `true`; el servid
 
 ## Transacciones y concurrencia
 
-Crear una orden desde una cita cambia la cita a atendida y crea la orden dentro de una transacción. Si falla la orden, el cambio de cita se revierte.
+El `MongoTransactionManager` y `@Transactional` agrupan cada operación de la API. Crear una orden desde una cita cambia la cita a atendida y crea la orden dentro de la misma transacción. Si falla la orden, el cambio de cita se revierte.
 
-Toda mutación de autorización, propuesta, ejecución o revisión individual escribe también la orden e invalida su revisión global previa. De este modo compite con las operaciones de cierre sobre un mismo documento y evita una decisión de entrega basada en trabajos obsoletos. El driver usa `withTransaction` con sus reintentos de conflictos transitorios; no se lanzan operaciones paralelas dentro de una transacción.
+Toda mutación de autorización, propuesta, ejecución o revisión individual escribe también la orden e invalida su revisión global previa. De este modo compite con las operaciones de cierre sobre un mismo documento y evita una decisión de entrega basada en trabajos obsoletos. La operación se confirma o revierte como una unidad en el replica set; no se lanzan operaciones paralelas dentro de una transacción.
 
 Las escrituras de estado y entrada de historial son atómicas. La unicidad de citas/órdenes se protege además con índices, por lo que no depende únicamente de un `find` previo.
 
@@ -74,13 +74,13 @@ La valoración se guarda dentro de la orden una sola vez. La API exige orden ent
 
 ## Identidad y errores
 
-Cada usuario recibe un token aleatorio de 32 bytes. Solo su SHA-256 se guarda en `usuarios.tokenHash`; no se devuelve ese hash en los listados. La creación inicial se realiza con el script de carga y las siguientes altas las autoriza el coordinador. Esta solución académica no incluye recuperación de cuentas, login por contraseña ni renovación de tokens.
+Cada usuario recibe un token aleatorio de 32 bytes. Solo su SHA-256 se guarda en `usuarios.tokenHash`; no se devuelve ese hash en los listados. Si no existen usuarios, `DemoUsers` crea tres cuentas de demostración e imprime sus tokens una sola vez al iniciar. Las siguientes altas las autoriza el coordinador. Esta solución académica no incluye recuperación de cuentas, login por contraseña ni renovación de tokens.
 
 Los errores usan JSON: `400` datos/esquema inválidos, `401` credencial ausente/inválida, `403` rol o propietario incorrecto, `404` recurso inexistente, `409` duplicados o transición incompatible y `500` fallo interno sin revelar el detalle técnico al cliente.
 
 ## Referencias técnicas
 
-- Driver oficial: [transacciones de MongoDB](https://www.mongodb.com/docs/drivers/node/current/crud/transactions/).
-- Framework: [manejo de errores de Express 5](https://expressjs.com/en/5x/guide/error-handling/).
+- Integración oficial: [transacciones de Spring Data MongoDB](https://docs.spring.io/spring-data/mongodb/reference/mongodb/client-session-transactions.html).
+- Framework: [Spring Boot](https://spring.io/projects/spring-boot) y [Spring Data MongoDB](https://docs.spring.io/spring-data/mongodb/reference/).
 
 Los requisitos funcionales proceden del PDF local del curso; estas referencias solo apoyan decisiones técnicas.

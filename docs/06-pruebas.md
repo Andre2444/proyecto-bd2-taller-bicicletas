@@ -2,20 +2,20 @@
 
 ## Resultado de la verificación realizada
 
-La API se ejecutó contra **MongoDB 7.0.14 real**, en un replica set temporal de un nodo, con Node.js 24.18.1. No se simuló la persistencia con arreglos en memoria ni con mocks.
+La versión de entrega Spring Boot se ejecutó contra **MongoDB 7.0.14 real**, en un replica set temporal de un nodo, con Java 21 y Newman. No se simuló la persistencia con arreglos en memoria ni con mocks.
 
 | Ejecución | Resultado |
 | --- | --- |
-| `npm test` | 49 casos individuales correctos: 43 del flujo HTTP y 6 de integridad; el runner informa 51 tests porque cuenta también los dos grupos contenedores. 0 fallos. |
-| `npm run test:postman` | Colección ejecutada con Newman: 43 solicitudes, 47 aserciones, 0 fallos. |
-| Comprobación de sintaxis | app.js, db.js y api.test.js aceptados por `node --check`. |
+| `npm run test:spring` | Colección Postman contra Spring Boot y MongoDB: 43 solicitudes, 47 aserciones, 0 fallos. |
+| Maven Wrapper | Compilación Java 21 correcta y JAR Spring Boot ejecutable generado. |
+| `npm test` / `npm run test:postman` | Pruebas de la implementación Express histórica. No sustituyen a `test:spring`. |
 
-La colección se verificó con el motor Newman, no mediante clics en la aplicación gráfica de Postman. El archivo importable es el mismo que ejecutó Newman.
+La colección se verificó con el motor Newman contra Spring Boot, no mediante clics en la aplicación gráfica de Postman. El archivo importable es el mismo que ejecutó Newman. `scripts/test-spring-postman.js` crea su propio replica set temporal, inicia el JAR, ejecuta la colección y guarda las estadísticas sin credenciales en `evidencias/resultados-spring-postman.json`.
 
 ## Evidencia incluida
 
-- `evidencias/resultados-http.json`: códigos esperados y recibidos en los 43 casos HTTP, con instante de generación en UTC.
-- `evidencias/resultados-postman.json`: estadísticas de ejecución y lista de errores de Newman (vacía en la ejecución verificada).
+- `evidencias/resultados-http.json` y `evidencias/resultados-postman.json`: evidencia de las pruebas HTTP históricas de Express.
+- `evidencias/resultados-spring-postman.json`: resultado de la colección contra Spring Boot.
 - `../database/documentos-ejemplo.extended.json`: ejemplos de las ocho colecciones, extraídos del flujo funcional antes de modificar la garantía para la prueba negativa. Los hashes de credenciales se sustituyen por texto explícito; este archivo es documentación, no una carga de usuarios con acceso funcional.
 - `../test/api.test.js`: aserciones ejecutables de integridad y concurrencia.
 
@@ -40,12 +40,16 @@ Un código 400/401/403/409 esperado es un resultado correcto de una prueba negat
 
 ## Reproducción
 
+Para comprobar la versión Spring Boot con los validadores e índices activos:
+
 ```powershell
 npm ci
-npm test
-npm run test:postman
+.\mvnw.cmd compile
+.\mvnw.cmd jar:jar spring-boot:repackage
+npm run test:spring
 ```
 
-Ambos comandos crean y cierran su propia base temporal. La primera ejecución necesita descargar el binario de MongoDB; las siguientes reutilizan `.local/mongodb-binaries`. Los puertos de prueba se asignan automáticamente. Las credenciales usadas por Newman permanecen en memoria y no se exportan a los reportes.
+El runner crea y cierra una base MongoDB temporal. La primera ejecución descarga el binario si no está en `.local/mongodb-binaries`. Los tokens de prueba permanecen en memoria y no se exportan a los reportes. `npm test` y `npm run test:postman` ejecutan pruebas de la versión Express histórica.
 
-Para revisión manual en Postman, seguir el README y ejecutar `npm run demo`. Las credenciales de esa demo sí se escriben en `.local/`, que debe permanecer fuera de Git y del ZIP de entrega.
+Para revisión manual en Postman, inicia el servidor Spring Boot, copia los tokens e IDs de demostración que imprime en la terminal y completa el entorno local. No compartas ese registro de consola ni subas los tokens.
+

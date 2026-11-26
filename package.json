@@ -14,6 +14,7 @@
     "demo": "node scripts/demo.js",
     "test": "node --test --test-concurrency=1 test/*.test.js",
     "test:postman": "node scripts/test-postman.js",
+    "test:spring": "node scripts/test-spring-postman.js",
     "artifacts": "node scripts/generate-artifacts.js"
   },
   "dependencies": {

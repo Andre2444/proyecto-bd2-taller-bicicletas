@@ -4,7 +4,7 @@
 
 La carga inicial crea tres documentos en `usuarios`, uno por rol. La colección Postman crea bicicleta, servicio, repuesto, cita, orden, diagnóstico, trabajos, ejecución, revisión, entrega, valoración y solicitud de garantía en orden de dependencias. Los identificadores se obtienen de respuestas reales; no se usan ObjectId ficticios como referencias inexistentes.
 
-La API instala los validadores de database/esquemas.mongodb.json y los índices de src/db.js al iniciar.
+La API instala los validadores de database/esquemas.mongodb.json y los índices de DatabaseInitializer.java al iniciar.
 
 ## Documento de entrada: bicicleta
 
@@ -43,7 +43,7 @@ MongoDB almacena `propietarioId` como ObjectId, aunque el JSON HTTP lo represent
 
 La API añade ordenId, copia del servicio, nombre y especificaciones del repuesto y `autorizacion: {decision: "pendiente"}`. El total es 30.000 + 2 × 20.000 = 70.000 COP. La autorización del cliente añade fecha y comentarios. La ejecución añade técnico, fechas y repuestos efectivamente usados. Estas etapas conservan la separación entre propuesta, decisión y trabajo realizado.
 
-`database/documentos-ejemplo.extended.json` muestra los documentos completos resultantes en las ocho colecciones, con fechas y ObjectId representados en Extended JSON. Son datos sintéticos creados durante las pruebas. Los hashes de credenciales están omitidos explícitamente; para generar usuarios funcionales debe usarse `npm run seed`.
+`database/documentos-ejemplo.extended.json` muestra los documentos completos resultantes en las ocho colecciones, con fechas y ObjectId representados en Extended JSON. Son datos sintéticos creados durante las pruebas. Los hashes de credenciales están omitidos explícitamente; para generar usuarios funcionales Spring Boot crea los usuarios de demostración al iniciar sobre una base sin usuarios.
 
 ## Consultas incluidas
 

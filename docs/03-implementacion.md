@@ -2,7 +2,7 @@
 
 ## Arquitectura
 
-La implementación elegida para el curso es Java 21 con Spring Boot 3.5 y Spring Data MongoDB. `TallerApplication` inicia la aplicación, `ApiController` recibe las rutas REST y usa `MongoTemplate` para leer y escribir documentos; `ApiException` y `ApiErrors` traducen excepciones a respuestas HTTP. La aplicación conserva las ocho colecciones. Los validadores `$jsonSchema` y los índices de `src/db.js` provienen del trabajo Node anterior y se pueden instalar con `npm.cmd run db:init`.
+La implementación elegida para el curso es Java 21 con Spring Boot 3.5 y Spring Data MongoDB. `TallerApplication` inicia la aplicación, `ApiController` recibe las rutas REST y usa `MongoTemplate` para leer y escribir documentos; `ApiException` y `ApiErrors` traducen excepciones a respuestas HTTP. La aplicación conserva las ocho colecciones. `DatabaseInitializer` instala los validadores `$jsonSchema` y los índices al iniciar Java, antes de `DemoUsers`.
 
 La implementación conserva `usuarios`, `bicicletas`, `servicios`, `repuestos`, `citas`, `ordenesServicio`, `trabajosOrden` y `solicitudesGarantia`. No crea tablas relacionales ni colecciones de inventario o facturas.
 
@@ -21,7 +21,7 @@ Estas convenciones resuelven detalles no definidos en el enunciado y no se atrib
 
 ## Esquema moderado
 
-`database/esquemas.mongodb.json` contiene el esquema de cada colección. `npm run db:init` crea colecciones o actualiza sus validadores con `validationLevel: "moderate"` y `validationAction: "error"`.
+`database/esquemas.mongodb.json` contiene el esquema de cada colección. `DatabaseInitializer` crea colecciones o actualiza sus validadores con `validationLevel: "moderate"` y `validationAction: "error"`.
 
 No se usa `additionalProperties: false`: los documentos admiten ampliaciones compatibles. La API solo acepta los campos de entrada definidos, salvo características técnicas adicionales de bicicletas. La estructura flexible no permite eludir la validación de los campos conocidos.
 

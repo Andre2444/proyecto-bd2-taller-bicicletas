@@ -28,11 +28,11 @@
 
 Crear o utilizar el repositorio del equipo, revisar los archivos y publicar el código con su historial real. Copiar los documentos Markdown a la Wiki y enlazarlos desde su página inicial. No publicar `.env`, `.local`, `node_modules` ni credenciales. El ZIP de entrega excluye esas rutas.
 
-El proyecto está publicado en el repositorio privado [Andre2444/proyecto-bd2-taller-bicicletas](https://github.com/Andre2444/proyecto-bd2-taller-bicicletas). La documentación se conserva en `docs/`; no se ha publicado como Wiki. El equipo debe registrar sus contribuciones reales. No se incluyen nombres, firmas, commits o evidencias de colaboración inventados.
+GitHub reporta el repositorio como público. El proyecto está publicado en el repositorio [Andre2444/proyecto-bd2-taller-bicicletas](https://github.com/Andre2444/proyecto-bd2-taller-bicicletas). La documentación se conserva en `docs/`; no se ha publicado como Wiki. El equipo debe registrar sus contribuciones reales. No se incluyen nombres, firmas, commits o evidencias de colaboración inventados.
 
 ## Pendientes externos a la implementación
 
 - La tecnología de esta implementación es Java con Spring Boot, según la corrección del estudiante.
 - Completar nombres y contribuciones reales del equipo en el medio de entrega del curso.
-- El repositorio privado de GitHub ya contiene el proyecto. Publicar la documentación en la Wiki si el docente así lo requiere.
+- El repositorio de GitHub ya contiene el proyecto. Publicar la documentación en la Wiki si el docente así lo requiere.
 - Asistir a la sustentación presencial y comprender el código. La ejecución de pruebas no sustituye esa actividad.

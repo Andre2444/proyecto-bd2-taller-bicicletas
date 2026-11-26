@@ -72,4 +72,4 @@ Estos ajustes complementan el modelo para cubrir el enunciado; no introducen inv
 
 ## Estado de este documento
 
-Documento de análisis basado en las fuentes. Los esquemas e índices de MongoDB están en `src/db.js` y `database/esquemas.mongodb.json`; la API de entrega está implementada con Java y Spring Boot en `src/main/java`. Las rutas y consultas se explican en `04-api.md` y `05-documentos-y-consultas.md`.
+Documento de análisis basado en las fuentes. Los esquemas e índices de MongoDB están en `DatabaseInitializer.java` y `database/esquemas.mongodb.json`; la API de entrega está implementada con Java y Spring Boot en `src/main/java`. Las rutas y consultas se explican en `04-api.md` y `05-documentos-y-consultas.md`.

@@ -13,7 +13,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
 public class DemoUsers {
-  @Bean CommandLineRunner bootstrapDemoUsers(MongoTemplate mongo) {
+  @Bean @org.springframework.core.annotation.Order(1)
+  CommandLineRunner bootstrapDemoUsers(MongoTemplate mongo) {
     return args -> {
       if (mongo.getCollection("usuarios").countDocuments() != 0) return;
       SecureRandom random = new SecureRandom();

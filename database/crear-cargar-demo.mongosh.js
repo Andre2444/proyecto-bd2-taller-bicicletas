@@ -1,10 +1,13 @@
 // Ejecutar desde la raíz del proyecto contra taller_bicicletas:
 // mongosh "mongodb://localhost:27017/taller_bicicletas" --file database/crear-cargar-demo.mongosh.js
-const demo = EJSON.parse(cat("database/documentos-ejemplo.extended.json"));
+// __dirname se define cuando se carga este archivo con load() desde Compass.
+// El fallback permite también ejecutarlo con --file desde la raíz del proyecto.
+const scriptDir = (typeof __dirname === "string" ? __dirname : "database").replace(/\\/g, "/");
+const demo = EJSON.parse(cat(`${scriptDir}/documentos-ejemplo.extended.json`));
 const target = db.getSiblingDB("taller_bicicletas");
 // Crear las colecciones que falten e instalar los validadores del modelo.
 // La misma configuración se aplica automáticamente al arrancar Spring Boot.
-const schemas = EJSON.parse(cat("database/esquemas.mongodb.json"));
+const schemas = EJSON.parse(cat(`${scriptDir}/esquemas.mongodb.json`));
 for (const [name, schema] of Object.entries(schemas)) {
   if (target.getCollectionNames().includes(name)) {
     const result = target.runCommand({

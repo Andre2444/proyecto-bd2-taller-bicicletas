@@ -6,18 +6,21 @@ Backend **Java 21 + Spring Boot 3.5.7 + MongoDB**, basado en la rama `main` de G
 
 Abre `Taller-BD2.code-workspace` en VS Code. El código está en `src/main/java/co/edu/uao/bicicletas`. También puedes abrir `pom.xml` en IntelliJ IDEA.
 
-Requiere **JDK 21** y Docker Desktop iniciado con contenedores Linux. En la terminal del proyecto:
+Requiere **JDK 21** y el servicio de MongoDB iniciado en Windows. Si tienes Compass, conéctalo a `mongodb://localhost:27017`; Compass permite ver la base, mientras el servicio MongoDB es el que la ejecuta. Si el servicio está detenido, abre Inicio, busca `Servicios`, ubica `MongoDB Server` y selecciona **Iniciar**. No hace falta Docker.
+
+En VS Code abre **Terminal → Nueva terminal**, verifica que la terminal esté en la carpeta del proyecto y ejecuta:
 
 ```powershell
-docker compose up -d --wait
 .\mvnw.cmd spring-boot:run
 ```
 
-La primera ejecución descarga Maven y sus dependencias. El servidor escucha en `http://127.0.0.1:3000/api`; comprueba `http://127.0.0.1:3000/api/salud`. Es una API REST: las operaciones se usan desde Postman.
+La primera ejecución descarga Maven y sus dependencias. Deja la terminal abierta: cuando aparezca `Started TallerApplication`, el servidor está funcionando. Comprueba `http://127.0.0.1:3000/api/salud`; debe responder `{"estado":"ok"}`. Para detenerlo, pulsa `Ctrl+C` en la terminal.
+
+Es una API REST, no una página web. Para demostrar sus operaciones, importa `postman/BD2.postman_collection.json` en Postman. Las agregaciones para mostrar durante la sustentación están en `database/consultas.mongosh.js`; se ejecutan en Compass, en **Aggregations**, después de tener datos en la base.
 
 Spring Boot instala automáticamente los validadores e índices de MongoDB. Cuando no hay usuarios, crea un cliente, técnico y coordinador de demostración e imprime sus IDs y tokens una sola vez. Importa `postman/BD2.postman_collection.json` y `postman/local.postman_environment.json`; completa las variables con esos valores y ejecuta la colección en orden sobre una base de demostración nueva. Los códigos 400, 401, 403 y 409 de los casos negativos son esperados.
 
-MongoDB conserva los datos en el volumen Docker. Para usar otro replica set o Atlas, define `MONGODB_URI` y `MONGODB_DB` en las variables de entorno de la terminal antes de iniciar Java. Spring Boot no carga archivos `.env` automáticamente. No publiques tokens ni cadenas de conexión con credenciales.
+MongoDB conserva los datos en la base `taller_bicicletas`. Al primer inicio, Spring Boot crea colecciones, validadores, índices y tres usuarios de demostración, e imprime sus IDs y tokens en la terminal. Guarda esos valores para configurar el entorno local de Postman; no compartas los tokens. Para usar Atlas u otro servidor, define `MONGODB_URI` y `MONGODB_DB` en la terminal antes de iniciar Java. Spring Boot no carga archivos `.env` automáticamente.
 
 ## Pruebas opcionales
 

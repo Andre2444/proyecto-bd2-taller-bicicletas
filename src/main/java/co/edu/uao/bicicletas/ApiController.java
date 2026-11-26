@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -27,7 +26,6 @@ public class ApiController {
 
   // Dispatcher pequeño que conserva las rutas del contrato Postman y concentra
   // las reglas del taller sobre los documentos originales de Hackolade.
-  @Transactional
   @RequestMapping("/**") public Object dispatch(HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, @RequestBody(required=false) Map<String,Object> body) throws Exception {
     String path = request.getRequestURI().substring("/api".length());
     String method = request.getMethod(); Map<String,Object> data = body == null ? new LinkedHashMap<>() : body;

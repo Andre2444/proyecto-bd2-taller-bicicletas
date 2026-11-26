@@ -1,47 +1,28 @@
-// Consultas de solo lectura. Seleccionar antes la base: use taller_bicicletas
-// Se usan documentos existentes de la demostración, sin IDs inventados.
-const cliente = db.usuarios.findOne({rol: 'cliente'});
-if (!cliente) throw new Error('Ejecute primero la carga y el flujo Postman.');
-const bicicleta = db.bicicletas.findOne({propietarioId: cliente._id});
-const orden = bicicleta && db.ordenesServicio.findOne({'bicicleta.bicicletaId': bicicleta._id});
+// Cinco agregaciones de análisis para la entrega.
+// Ejecutar después de cargar datos: mongosh "mongodb://localhost:27017/taller_bicicletas" --file database/consultas.mongosh.js
+if (db.trabajosOrden.countDocuments() == 0 || db.ordenesServicio.countDocuments() == 0) throw new Error('Base vacía: ejecute database/crear-cargar-demo.mongosh.js.');
 
-print('Bicicletas del cliente');
-printjson(db.bicicletas.find({propietarioId: cliente._id}).toArray());
-print('Agenda activa');
-printjson(db.citas.find({estado: {$in: ['solicitada', 'confirmada']}}).sort({fechaHora: 1}).toArray());
-print('Órdenes activas');
-printjson(db.ordenesServicio.find({estado: {$nin: ['entregada', 'cancelada']}}).toArray());
-if (bicicleta) {
-  print('Historial con trabajos');
-  printjson(db.ordenesServicio.aggregate([
-    {$match: {'bicicleta.bicicletaId': bicicleta._id}},
-    {$sort: {fechaRecepcion: -1}},
-    {$lookup: {from: 'trabajosOrden', localField: '_id', foreignField: 'ordenId', as: 'trabajos'}}
-  ]).toArray());
-}
-if (orden) {
-  print('Presupuesto por trabajo y total');
-  printjson(db.trabajosOrden.aggregate([
-    {$match: {ordenId: orden._id}},
-    {$project: {descripcionIntervencion: 1, subtotal: {$add: ['$manoObraEstimada', {$sum: {$map: {input: '$repuestosPrevistos', as: 'r', in: {$multiply: ['$$r.cantidad', '$$r.precioUnitarioEstimado']}}}}]}}},
-    {$group: {_id: null, totalEstimado: {$sum: '$subtotal'}, trabajos: {$push: '$$ROOT'}}}
-  ]).toArray());
-}
-print('Órdenes por estado');
-printjson(db.ordenesServicio.aggregate([{$group: {_id: '$estado', cantidad: {$sum: 1}}}]).toArray());
-print('Servicios más solicitados en propuestas');
+// 1. ¿Qué servicios reciben más propuestas y cuánto valor económico representan?
+print('\n1. Servicios propuestos, autorizaciones e importe estimado');
 printjson(db.trabajosOrden.aggregate([
-  {$match: {'servicio.servicioId': {$exists: true}}},
-  {$group: {_id: '$servicio.servicioId', nombre: {$first: '$servicio.nombre'}, cantidad: {$sum: 1}}},
-  {$sort: {cantidad: -1}}
+ {$match:{'servicio.servicioId':{$exists:true}}},
+ {$project:{servicioId:'$servicio.servicioId',nombre:'$servicio.nombre',decision:'$autorizacion.decision',subtotal:{$add:['$manoObraEstimada',{$sum:{$map:{input:{$ifNull:['$repuestosPrevistos',[]]},as:'r',in:{$multiply:['$$r.cantidad','$$r.precioUnitarioEstimado']}}}}]}}},
+ {$group:{_id:'$servicioId',servicio:{$first:'$nombre'},propuestas:{$sum:1},autorizados:{$sum:{$cond:[{$eq:['$decision','autorizado']},1,0]}},valorPropuestoCOP:{$sum:'$subtotal'}}},
+ {$sort:{propuestas:-1,servicio:1}}
 ]).toArray());
-print('Tiempo promedio de atención en horas');
-printjson(db.ordenesServicio.aggregate([
-  {$match: {estado: 'entregada'}},
-  {$group: {_id: null, promedioHoras: {$avg: {$divide: [{$subtract: ['$entrega.fecha', '$fechaRecepcion']}, 3600000]}}}}
-]).toArray());
-print('Valoraciones');
-printjson(db.ordenesServicio.aggregate([
-  {$match: {valoracionServicio: {$exists: true}}},
-  {$group: {_id: null, cantidad: {$sum: 1}, promedio: {$avg: '$valoracionServicio.calificacion'}}}
-]).toArray());
+
+// 2. ¿Cómo se distribuyen las órdenes por tipo de bicicleta y estado?
+print('\n2. Órdenes agrupadas por tipo y estado');
+printjson(db.ordenesServicio.aggregate([{$group:{_id:{tipo:'$bicicleta.tipo',estado:'$estado'},cantidad:{$sum:1}}},{$sort:{'_id.tipo':1,'_id.estado':1}}]).toArray());
+
+// 3. ¿Cuál es la calificación promedio por tipo de bicicleta?
+print('\n3. Calificación promedio y número de órdenes valoradas por tipo');
+printjson(db.ordenesServicio.aggregate([{$match:{'valoracionServicio.calificacion':{$exists:true}}},{$group:{_id:'$bicicleta.tipo',ordenesValoradas:{$sum:1},promedio:{$avg:'$valoracionServicio.calificacion'},minimo:{$min:'$valoracionServicio.calificacion'},maximo:{$max:'$valoracionServicio.calificacion'}}},{$sort:{_id:1}}]).toArray());
+
+// 4. ¿Cuántas órdenes se entregaron cada mes y cuánto tardaron en promedio?
+print('\n4. Tiempo de atención mensual de órdenes entregadas');
+printjson(db.ordenesServicio.aggregate([{$match:{estado:'entregada','entrega.fecha':{$type:'date'}}},{$project:{mes:{$dateToString:{format:'%Y-%m',date:'$entrega.fecha'}},horas:{$divide:[{$subtract:['$entrega.fecha','$fechaRecepcion']},3600000]}}},{$group:{_id:'$mes',entregadas:{$sum:1},promedioHoras:{$avg:'$horas'},maximoHoras:{$max:'$horas'}}},{$sort:{_id:1}}]).toArray());
+
+// 5. ¿Cuántas solicitudes de garantía hay por estado y a qué valor de trabajos se asocian?
+print('\n5. Solicitudes de garantía y valor de sus trabajos relacionados');
+printjson(db.solicitudesGarantia.aggregate([{$lookup:{from:'trabajosOrden',localField:'trabajoId',foreignField:'_id',as:'trabajo'}},{$unwind:'$trabajo'},{$project:{estado:1,subtotal:{$add:['$trabajo.manoObraEstimada',{$sum:{$map:{input:{$ifNull:['$trabajo.repuestosPrevistos',[]]},as:'r',in:{$multiply:['$$r.cantidad','$$r.precioUnitarioEstimado']}}}}]}}},{$group:{_id:'$estado',solicitudes:{$sum:1},valorTrabajosCOP:{$sum:'$subtotal'}}},{$sort:{_id:1}}]).toArray());

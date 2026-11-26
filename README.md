@@ -18,6 +18,8 @@ La primera ejecución descarga Maven y sus dependencias. Deja la terminal abiert
 
 Es una API REST, no una página web. Para demostrar sus operaciones, importa `postman/BD2.postman_collection.json` en Postman. Las agregaciones para mostrar durante la sustentación están en `database/consultas.mongosh.js`; se ejecutan en Compass, en **Aggregations**, después de tener datos en la base.
 
+Para preparar datos de demostración si las colecciones de negocio están vacías, inicia primero Spring Boot (así se instalan esquemas e índices) y luego, desde la raíz del proyecto, ejecuta `mongosh "mongodb://localhost:27017/taller_bicicletas" --file database/crear-cargar-demo.mongosh.js`. El script conserva los usuarios existentes y se detiene si detecta datos previos en otras colecciones. Después ejecuta `mongosh "mongodb://localhost:27017/taller_bicicletas" --file database/consultas.mongosh.js`, o copia cada pipeline en la pestaña **Aggregations** de Compass.
+
 Spring Boot instala automáticamente los validadores e índices de MongoDB. Cuando no hay usuarios, crea un cliente, técnico y coordinador de demostración e imprime sus IDs y tokens una sola vez. Importa `postman/BD2.postman_collection.json` y `postman/local.postman_environment.json`; completa las variables con esos valores y ejecuta la colección en orden sobre una base de demostración nueva. Los códigos 400, 401, 403 y 409 de los casos negativos son esperados.
 
 MongoDB conserva los datos en la base `taller_bicicletas`. Al primer inicio, Spring Boot crea colecciones, validadores, índices y tres usuarios de demostración, e imprime sus IDs y tokens en la terminal. Guarda esos valores para configurar el entorno local de Postman; no compartas los tokens. Para usar Atlas u otro servidor, define `MONGODB_URI` y `MONGODB_DB` en la terminal antes de iniciar Java. Spring Boot no carga archivos `.env` automáticamente.
@@ -41,6 +43,8 @@ El runner inicia el JAR Java y un replica set temporal, comprueba que Java insta
 - `src/main/java/`: backend Spring Boot. `DatabaseInitializer` instala MongoDB, `DemoUsers` crea usuarios y `ApiController` contiene las operaciones del taller.
 - `database/esquemas.mongodb.json`: fuente del esquema, incluida en el JAR al compilar.
 - `database/consultas.mongosh.js`: agregaciones y consultas para practicar la sustentación.
+- `database/crear-cargar-demo.mongosh.js`: crea las colecciones que falten, instala los validadores y carga los documentos de demostración sin sobrescribir usuarios.
+- `docs/evidencias/pruebas-postman.md` y los JSON asociados: solicitudes, códigos y respuestas observados en la prueba automatizada.
 - `docs/01-alcance-y-requisitos.md` a `docs/07-sustentacion-y-entrega.md`: documentación de la actividad.
 - `docs/referencias/enunciado-proyecto.pdf`: PDF original del curso; el modelado de referencia está en la misma carpeta.
 

@@ -1,0 +1,1770 @@
+{
+  "nota": "Respuestas observadas durante la ejecución automatizada en MongoDB temporal. Se omiten campos de token y secretos.",
+  "solicitudes": [
+    {
+      "solicitud": "01 Salud de la API",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/salud",
+      "estado": 200,
+      "respuesta": {
+        "estado": "ok"
+      }
+    },
+    {
+      "solicitud": "02 Rechazar acceso sin token",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/ordenes",
+      "estado": 401,
+      "respuesta": {
+        "error": "Se requiere token Bearer válido"
+      }
+    },
+    {
+      "solicitud": "03 Cliente no crea usuarios",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/usuarios",
+      "estado": 403,
+      "respuesta": {
+        "error": "Rol sin permiso"
+      }
+    },
+    {
+      "solicitud": "04 Rechazar bicicleta inválida",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/bicicletas",
+      "estado": 400,
+      "respuesta": {
+        "error": "ObjectId inválido"
+      }
+    },
+    {
+      "solicitud": "05 Registrar bicicleta de montaña",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/bicicletas",
+      "estado": 201,
+      "respuesta": {
+        "propietarioId": "6b07bcffc58eb8b5106951d1",
+        "marca": "Trek",
+        "modelo": "Marlin",
+        "tipo": "montana",
+        "color": "Azul",
+        "caracteristicas": {
+          "material": "Aluminio",
+          "suspension": {
+            "informacion": "Delantera",
+            "recorrido": 100
+          }
+        },
+        "_id": "6b07bd00c58eb8b5106951d2"
+      }
+    },
+    {
+      "solicitud": "06 Crear servicio",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/servicios",
+      "estado": 201,
+      "respuesta": {
+        "nombre": "Ajuste de frenos",
+        "categoria": "frenos",
+        "descripcion": "Ajuste y revisión de frenado",
+        "duracionEstimada": 45,
+        "precioReferencia": 30000,
+        "tareasHabituales": [
+          {
+            "nombre": "Ajustar",
+            "descripcion": "Regular tensión"
+          }
+        ],
+        "recomendacionesGenerales": [
+          "Revisar desgaste"
+        ],
+        "_id": "6b07bd00c58eb8b5106951d3"
+      }
+    },
+    {
+      "solicitud": "07 Crear repuesto",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/repuestos",
+      "estado": 201,
+      "respuesta": {
+        "nombre": "Pastillas",
+        "especificaciones": "Compatibles con freno de disco",
+        "precio": 20000,
+        "_id": "6b07bd00c58eb8b5106951d4"
+      }
+    },
+    {
+      "solicitud": "08 Solicitar cita",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/citas",
+      "estado": 201,
+      "respuesta": {
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "bicicletaId": "6b07bd00c58eb8b5106951d2",
+        "fechaHora": "2026-11-27T05:00:48.161+00:00",
+        "motivo": "Revisar frenos",
+        "problemasObservados": "Ruido al frenar",
+        "serviciosInteres": [
+          "6b07bd00c58eb8b5106951d3"
+        ],
+        "_id": "6b07bd01c58eb8b5106951d5",
+        "estado": "solicitada"
+      }
+    },
+    {
+      "solicitud": "09 Rechazar cita activa duplicada",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/citas",
+      "estado": 409,
+      "respuesta": {
+        "error": "Ya existe una cita activa en ese horario"
+      }
+    },
+    {
+      "solicitud": "10 Confirmar y reprogramar cita",
+      "metodo": "PATCH",
+      "ruta": "http://127.0.0.1:3101/api/citas/6b07bd01c58eb8b5106951d5",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d5",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "bicicletaId": "6b07bd00c58eb8b5106951d2",
+        "fechaHora": "2026-11-28T05:00:48.161+00:00",
+        "motivo": "Revisar frenos",
+        "problemasObservados": "Ruido al frenar",
+        "serviciosInteres": [
+          "6b07bd00c58eb8b5106951d3"
+        ],
+        "estado": "confirmada",
+        "observacionCambio": "Disponibilidad confirmada por coordinador"
+      }
+    },
+    {
+      "solicitud": "11 Recibir bicicleta con cita",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes",
+      "estado": 201,
+      "respuesta": {
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "citaId": "6b07bd01c58eb8b5106951d5",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Ruido al frenar",
+          "condicionesObservadas": "Desgaste de pastillas",
+          "accesorios": [
+            "Luz delantera"
+          ],
+          "fotografias": [
+            {
+              "nombreArchivo": "freno.jpg",
+              "descripcion": "Estado inicial del freno",
+              "ubicacion": "/evidencias/freno.jpg"
+            }
+          ]
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+        "estado": "recibida",
+        "_id": "6b07bd01c58eb8b5106951d6",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:49.461+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          }
+        ],
+        "version": 0
+      }
+    },
+    {
+      "solicitud": "12 Rechazar segunda orden activa",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes",
+      "estado": 409,
+      "respuesta": {
+        "error": "La bicicleta ya tiene orden activa"
+      }
+    },
+    {
+      "solicitud": "13 Registrar diagnóstico",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/diagnostico",
+      "estado": 201,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d6",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "citaId": "6b07bd01c58eb8b5106951d5",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Ruido al frenar",
+          "condicionesObservadas": "Desgaste de pastillas",
+          "accesorios": [
+            "Luz delantera"
+          ],
+          "fotografias": [
+            {
+              "nombreArchivo": "freno.jpg",
+              "descripcion": "Estado inicial del freno",
+              "ubicacion": "/evidencias/freno.jpg"
+            }
+          ]
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+        "estado": "en diagnostico",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:49.461+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          },
+          {
+            "estado": "en diagnostico",
+            "fecha": "2026-11-26T05:00:49.678+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Registro de hallazgos"
+          }
+        ],
+        "version": 0,
+        "diagnostico": {
+          "hallazgos": [
+            {
+              "componente": "Freno delantero",
+              "condicion": "Desgastado",
+              "descripcion": "Pastillas agotadas",
+              "prioridad": "alta",
+              "observaciones": "Requiere sustitución",
+              "accionesRecomendadas": [
+                "Cambiar pastillas"
+              ],
+              "tecnicoId": "6b07bcffc58eb8b5106951d0"
+            }
+          ],
+          "evidencias": [
+            {
+              "nombreArchivo": "diagnostico.jpg",
+              "descripcion": "Desgaste encontrado",
+              "ubicacion": "/evidencias/diagnostico.jpg"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "solicitud": "14 Crear trabajo propuesto",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/trabajos",
+      "estado": 201,
+      "respuesta": {
+        "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+        "componente": "Freno delantero",
+        "manoObraEstimada": 30000,
+        "repuestosPrevistos": [
+          {
+            "repuestoId": "6b07bd00c58eb8b5106951d4",
+            "cantidad": 2,
+            "precioUnitarioEstimado": 20000,
+            "nombre": "Pastillas",
+            "especificaciones": "Compatibles con freno de disco"
+          }
+        ],
+        "observaciones": "Presupuesto sujeto a autorización",
+        "_id": "6b07bd01c58eb8b5106951d7",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "pendiente"
+        },
+        "servicio": {
+          "servicioId": "6b07bd00c58eb8b5106951d3",
+          "nombre": "Ajuste de frenos",
+          "descripcion": "Ajuste y revisión de frenado"
+        }
+      }
+    },
+    {
+      "solicitud": "15 Consultar total de propuesta",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/propuesta",
+      "estado": 200,
+      "respuesta": {
+        "moneda": "COP",
+        "trabajos": [
+          {
+            "_id": "6b07bd01c58eb8b5106951d7",
+            "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+            "componente": "Freno delantero",
+            "manoObraEstimada": 30000,
+            "repuestosPrevistos": [
+              {
+                "repuestoId": "6b07bd00c58eb8b5106951d4",
+                "cantidad": 2,
+                "precioUnitarioEstimado": 20000,
+                "nombre": "Pastillas",
+                "especificaciones": "Compatibles con freno de disco"
+              }
+            ],
+            "observaciones": "Presupuesto sujeto a autorización",
+            "ordenId": "6b07bd01c58eb8b5106951d6",
+            "autorizacion": {
+              "decision": "pendiente"
+            },
+            "servicio": {
+              "servicioId": "6b07bd00c58eb8b5106951d3",
+              "nombre": "Ajuste de frenos",
+              "descripcion": "Ajuste y revisión de frenado"
+            },
+            "subtotalEstimado": 70000
+          }
+        ],
+        "totalEstimado": 70000,
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "totalAutorizado": 0
+      }
+    },
+    {
+      "solicitud": "16 Bloquear ejecución pendiente",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/ejecucion",
+      "estado": 409,
+      "respuesta": {
+        "error": "Solo se ejecutan trabajos autorizados"
+      }
+    },
+    {
+      "solicitud": "17 Autorizar trabajo",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/autorizacion",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d7",
+        "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+        "componente": "Freno delantero",
+        "manoObraEstimada": 30000,
+        "repuestosPrevistos": [
+          {
+            "repuestoId": "6b07bd00c58eb8b5106951d4",
+            "cantidad": 2,
+            "precioUnitarioEstimado": 20000,
+            "nombre": "Pastillas",
+            "especificaciones": "Compatibles con freno de disco"
+          }
+        ],
+        "observaciones": "Presupuesto sujeto a autorización",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "autorizado",
+          "comentarios": "Acepto presupuesto",
+          "fecha": "2026-11-26T05:00:50.071+00:00"
+        },
+        "servicio": {
+          "servicioId": "6b07bd00c58eb8b5106951d3",
+          "nombre": "Ajuste de frenos",
+          "descripcion": "Ajuste y revisión de frenado"
+        }
+      }
+    },
+    {
+      "solicitud": "18 Bloquear cambio de decisión",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/autorizacion",
+      "estado": 409,
+      "respuesta": {
+        "error": "El trabajo ya tiene decisión"
+      }
+    },
+    {
+      "solicitud": "19 Iniciar ejecución autorizada",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/ejecucion",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d7",
+        "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+        "componente": "Freno delantero",
+        "manoObraEstimada": 30000,
+        "repuestosPrevistos": [
+          {
+            "repuestoId": "6b07bd00c58eb8b5106951d4",
+            "cantidad": 2,
+            "precioUnitarioEstimado": 20000,
+            "nombre": "Pastillas",
+            "especificaciones": "Compatibles con freno de disco"
+          }
+        ],
+        "observaciones": "Presupuesto sujeto a autorización",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "autorizado",
+          "comentarios": "Acepto presupuesto",
+          "fecha": "2026-11-26T05:00:50.071+00:00"
+        },
+        "servicio": {
+          "servicioId": "6b07bd00c58eb8b5106951d3",
+          "nombre": "Ajuste de frenos",
+          "descripcion": "Ajuste y revisión de frenado"
+        },
+        "ejecucion": {
+          "estado": "en ejecucion",
+          "descripcionRealizada": "Desmontaje y limpieza",
+          "repuestosUtilizados": [],
+          "fechaInicio": "2026-11-26T05:00:50.281+00:00"
+        },
+        "tecnicoId": "6b07bcffc58eb8b5106951d0"
+      }
+    },
+    {
+      "solicitud": "20 Bloquear entrega prematura",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/estado",
+      "estado": 409,
+      "respuesta": {
+        "error": "Faltan decisiones o trabajos autorizados por finalizar"
+      }
+    },
+    {
+      "solicitud": "21 Bloquear valoración anticipada",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/valoracion",
+      "estado": 409,
+      "respuesta": {
+        "error": "Solo órdenes entregadas pueden valorarse"
+      }
+    },
+    {
+      "solicitud": "22 Bloquear sobrecosto no autorizado",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/ejecucion",
+      "estado": 409,
+      "respuesta": {
+        "error": "Repuesto o sobrecosto no autorizado: proponga un trabajo adicional"
+      }
+    },
+    {
+      "solicitud": "23 Finalizar trabajo",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/ejecucion",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d7",
+        "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+        "componente": "Freno delantero",
+        "manoObraEstimada": 30000,
+        "repuestosPrevistos": [
+          {
+            "repuestoId": "6b07bd00c58eb8b5106951d4",
+            "cantidad": 2,
+            "precioUnitarioEstimado": 20000,
+            "nombre": "Pastillas",
+            "especificaciones": "Compatibles con freno de disco"
+          }
+        ],
+        "observaciones": "Presupuesto sujeto a autorización",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "autorizado",
+          "comentarios": "Acepto presupuesto",
+          "fecha": "2026-11-26T05:00:50.071+00:00"
+        },
+        "servicio": {
+          "servicioId": "6b07bd00c58eb8b5106951d3",
+          "nombre": "Ajuste de frenos",
+          "descripcion": "Ajuste y revisión de frenado"
+        },
+        "ejecucion": {
+          "estado": "finalizado",
+          "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+          "repuestosUtilizados": [
+            {
+              "repuestoId": "6b07bd00c58eb8b5106951d4",
+              "cantidad": 2,
+              "precioUnitarioAplicado": 19000,
+              "nombre": "Pastillas",
+              "especificaciones": "Compatibles con freno de disco"
+            }
+          ],
+          "fechaInicio": "2026-11-26T05:00:50.281+00:00",
+          "fechaFinalizacion": "2026-11-26T05:00:50.686+00:00"
+        },
+        "tecnicoId": "6b07bcffc58eb8b5106951d0"
+      }
+    },
+    {
+      "solicitud": "24 Proponer intervención adicional",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/trabajos",
+      "estado": 201,
+      "respuesta": {
+        "descripcionIntervencion": "Ajustar transmisión",
+        "componente": "Cambio trasero",
+        "manoObraEstimada": 15000,
+        "observaciones": "Intervención adicional requiere decisión",
+        "repuestosPrevistos": [],
+        "_id": "6b07bd02c58eb8b5106951d8",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "pendiente"
+        }
+      }
+    },
+    {
+      "solicitud": "25 Rechazar trabajo adicional",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd02c58eb8b5106951d8/autorizacion",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd02c58eb8b5106951d8",
+        "descripcionIntervencion": "Ajustar transmisión",
+        "componente": "Cambio trasero",
+        "manoObraEstimada": 15000,
+        "observaciones": "Intervención adicional requiere decisión",
+        "repuestosPrevistos": [],
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "rechazado",
+          "comentarios": "Lo haré en otra visita",
+          "fecha": "2026-11-26T05:00:50.929+00:00"
+        }
+      }
+    },
+    {
+      "solicitud": "26 Bloquear ejecución rechazada",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd02c58eb8b5106951d8/ejecucion",
+      "estado": 409,
+      "respuesta": {
+        "error": "Solo se ejecutan trabajos autorizados"
+      }
+    },
+    {
+      "solicitud": "27 Cambiar catálogo sin cambiar historial",
+      "metodo": "PATCH",
+      "ruta": "http://127.0.0.1:3101/api/repuestos/6b07bd00c58eb8b5106951d4",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd00c58eb8b5106951d4",
+        "nombre": "Pastillas nuevo catálogo",
+        "especificaciones": "Compatibles con freno de disco",
+        "precio": 50000
+      }
+    },
+    {
+      "solicitud": "28 Comprobar presupuesto histórico",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/propuesta",
+      "estado": 200,
+      "respuesta": {
+        "moneda": "COP",
+        "trabajos": [
+          {
+            "_id": "6b07bd01c58eb8b5106951d7",
+            "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+            "componente": "Freno delantero",
+            "manoObraEstimada": 30000,
+            "repuestosPrevistos": [
+              {
+                "repuestoId": "6b07bd00c58eb8b5106951d4",
+                "cantidad": 2,
+                "precioUnitarioEstimado": 20000,
+                "nombre": "Pastillas",
+                "especificaciones": "Compatibles con freno de disco"
+              }
+            ],
+            "observaciones": "Presupuesto sujeto a autorización",
+            "ordenId": "6b07bd01c58eb8b5106951d6",
+            "autorizacion": {
+              "decision": "autorizado",
+              "comentarios": "Acepto presupuesto",
+              "fecha": "2026-11-26T05:00:50.071+00:00"
+            },
+            "servicio": {
+              "servicioId": "6b07bd00c58eb8b5106951d3",
+              "nombre": "Ajuste de frenos",
+              "descripcion": "Ajuste y revisión de frenado"
+            },
+            "ejecucion": {
+              "estado": "finalizado",
+              "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+              "repuestosUtilizados": [
+                {
+                  "repuestoId": "6b07bd00c58eb8b5106951d4",
+                  "cantidad": 2,
+                  "precioUnitarioAplicado": 19000,
+                  "nombre": "Pastillas",
+                  "especificaciones": "Compatibles con freno de disco"
+                }
+              ],
+              "fechaInicio": "2026-11-26T05:00:50.281+00:00",
+              "fechaFinalizacion": "2026-11-26T05:00:50.686+00:00"
+            },
+            "tecnicoId": "6b07bcffc58eb8b5106951d0",
+            "subtotalEstimado": 70000
+          },
+          {
+            "_id": "6b07bd02c58eb8b5106951d8",
+            "descripcionIntervencion": "Ajustar transmisión",
+            "componente": "Cambio trasero",
+            "manoObraEstimada": 15000,
+            "observaciones": "Intervención adicional requiere decisión",
+            "repuestosPrevistos": [],
+            "ordenId": "6b07bd01c58eb8b5106951d6",
+            "autorizacion": {
+              "decision": "rechazado",
+              "comentarios": "Lo haré en otra visita",
+              "fecha": "2026-11-26T05:00:50.929+00:00"
+            },
+            "subtotalEstimado": 15000
+          }
+        ],
+        "totalEstimado": 85000,
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "totalAutorizado": 70000
+      }
+    },
+    {
+      "solicitud": "29 Revisión individual del trabajo",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/revision",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d7",
+        "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+        "componente": "Freno delantero",
+        "manoObraEstimada": 30000,
+        "repuestosPrevistos": [
+          {
+            "repuestoId": "6b07bd00c58eb8b5106951d4",
+            "cantidad": 2,
+            "precioUnitarioEstimado": 20000,
+            "nombre": "Pastillas",
+            "especificaciones": "Compatibles con freno de disco"
+          }
+        ],
+        "observaciones": "Presupuesto sujeto a autorización",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "autorizado",
+          "comentarios": "Acepto presupuesto",
+          "fecha": "2026-11-26T05:00:50.071+00:00"
+        },
+        "servicio": {
+          "servicioId": "6b07bd00c58eb8b5106951d3",
+          "nombre": "Ajuste de frenos",
+          "descripcion": "Ajuste y revisión de frenado"
+        },
+        "ejecucion": {
+          "estado": "finalizado",
+          "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+          "repuestosUtilizados": [
+            {
+              "repuestoId": "6b07bd00c58eb8b5106951d4",
+              "cantidad": 2,
+              "precioUnitarioAplicado": 19000,
+              "nombre": "Pastillas",
+              "especificaciones": "Compatibles con freno de disco"
+            }
+          ],
+          "fechaInicio": "2026-11-26T05:00:50.281+00:00",
+          "fechaFinalizacion": "2026-11-26T05:00:50.686+00:00"
+        },
+        "tecnicoId": "6b07bcffc58eb8b5106951d0",
+        "revision": {
+          "puntosVerificados": [
+            {
+              "punto": "Frenado",
+              "resultado": "Correcto"
+            }
+          ],
+          "resultado": "Prueba superada",
+          "aprobada": true,
+          "recomendaciones": [
+            "Revisar periódicamente"
+          ]
+        }
+      }
+    },
+    {
+      "solicitud": "30 Bloquear lista sin revisión de entrega",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/estado",
+      "estado": 409,
+      "respuesta": {
+        "error": "La revisión de entrega debe estar aprobada"
+      }
+    },
+    {
+      "solicitud": "31 Aprobar revisión de entrega",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/revision",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d6",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "citaId": "6b07bd01c58eb8b5106951d5",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Ruido al frenar",
+          "condicionesObservadas": "Desgaste de pastillas",
+          "accesorios": [
+            "Luz delantera"
+          ],
+          "fotografias": [
+            {
+              "nombreArchivo": "freno.jpg",
+              "descripcion": "Estado inicial del freno",
+              "ubicacion": "/evidencias/freno.jpg"
+            }
+          ]
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+        "estado": "en ejecucion",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:49.461+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          },
+          {
+            "estado": "en diagnostico",
+            "fecha": "2026-11-26T05:00:49.678+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Registro de hallazgos"
+          },
+          {
+            "estado": "pendiente de autorizacion",
+            "fecha": "2026-11-26T05:00:49.773+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Trabajo propuesto para autorización"
+          },
+          {
+            "estado": "en ejecucion",
+            "fecha": "2026-11-26T05:00:50.287+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Inicio de trabajo autorizado"
+          }
+        ],
+        "version": 7,
+        "diagnostico": {
+          "hallazgos": [
+            {
+              "componente": "Freno delantero",
+              "condicion": "Desgastado",
+              "descripcion": "Pastillas agotadas",
+              "prioridad": "alta",
+              "observaciones": "Requiere sustitución",
+              "accionesRecomendadas": [
+                "Cambiar pastillas"
+              ],
+              "tecnicoId": "6b07bcffc58eb8b5106951d0"
+            }
+          ],
+          "evidencias": [
+            {
+              "nombreArchivo": "diagnostico.jpg",
+              "descripcion": "Desgaste encontrado",
+              "ubicacion": "/evidencias/diagnostico.jpg"
+            }
+          ]
+        },
+        "revisionEntrega": {
+          "puntosVerificados": [
+            {
+              "punto": "Frenado",
+              "resultado": "Correcto"
+            },
+            {
+              "punto": "Accesorios",
+              "resultado": "Completos"
+            }
+          ],
+          "resultado": "Bicicleta revisada",
+          "aprobada": true,
+          "recomendaciones": [
+            "Revisar desgaste mensualmente"
+          ]
+        }
+      }
+    },
+    {
+      "solicitud": "32 Marcar lista para entrega",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/estado",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d6",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "citaId": "6b07bd01c58eb8b5106951d5",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Ruido al frenar",
+          "condicionesObservadas": "Desgaste de pastillas",
+          "accesorios": [
+            "Luz delantera"
+          ],
+          "fotografias": [
+            {
+              "nombreArchivo": "freno.jpg",
+              "descripcion": "Estado inicial del freno",
+              "ubicacion": "/evidencias/freno.jpg"
+            }
+          ]
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+        "estado": "lista para entrega",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:49.461+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          },
+          {
+            "estado": "en diagnostico",
+            "fecha": "2026-11-26T05:00:49.678+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Registro de hallazgos"
+          },
+          {
+            "estado": "pendiente de autorizacion",
+            "fecha": "2026-11-26T05:00:49.773+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Trabajo propuesto para autorización"
+          },
+          {
+            "estado": "en ejecucion",
+            "fecha": "2026-11-26T05:00:50.287+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Inicio de trabajo autorizado"
+          },
+          {
+            "estado": "lista para entrega",
+            "fecha": "2026-11-26T05:00:51.663+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Revisión aprobada"
+          }
+        ],
+        "version": 7,
+        "diagnostico": {
+          "hallazgos": [
+            {
+              "componente": "Freno delantero",
+              "condicion": "Desgastado",
+              "descripcion": "Pastillas agotadas",
+              "prioridad": "alta",
+              "observaciones": "Requiere sustitución",
+              "accionesRecomendadas": [
+                "Cambiar pastillas"
+              ],
+              "tecnicoId": "6b07bcffc58eb8b5106951d0"
+            }
+          ],
+          "evidencias": [
+            {
+              "nombreArchivo": "diagnostico.jpg",
+              "descripcion": "Desgaste encontrado",
+              "ubicacion": "/evidencias/diagnostico.jpg"
+            }
+          ]
+        },
+        "revisionEntrega": {
+          "puntosVerificados": [
+            {
+              "punto": "Frenado",
+              "resultado": "Correcto"
+            },
+            {
+              "punto": "Accesorios",
+              "resultado": "Completos"
+            }
+          ],
+          "resultado": "Bicicleta revisada",
+          "aprobada": true,
+          "recomendaciones": [
+            "Revisar desgaste mensualmente"
+          ]
+        }
+      }
+    },
+    {
+      "solicitud": "33 Entregar bicicleta",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/entrega",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d6",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "citaId": "6b07bd01c58eb8b5106951d5",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Ruido al frenar",
+          "condicionesObservadas": "Desgaste de pastillas",
+          "accesorios": [
+            "Luz delantera"
+          ],
+          "fotografias": [
+            {
+              "nombreArchivo": "freno.jpg",
+              "descripcion": "Estado inicial del freno",
+              "ubicacion": "/evidencias/freno.jpg"
+            }
+          ]
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+        "estado": "entregada",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:49.461+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          },
+          {
+            "estado": "en diagnostico",
+            "fecha": "2026-11-26T05:00:49.678+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Registro de hallazgos"
+          },
+          {
+            "estado": "pendiente de autorizacion",
+            "fecha": "2026-11-26T05:00:49.773+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Trabajo propuesto para autorización"
+          },
+          {
+            "estado": "en ejecucion",
+            "fecha": "2026-11-26T05:00:50.287+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Inicio de trabajo autorizado"
+          },
+          {
+            "estado": "lista para entrega",
+            "fecha": "2026-11-26T05:00:51.663+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Revisión aprobada"
+          },
+          {
+            "estado": "entregada",
+            "fecha": "2026-11-26T05:00:51.758+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción confirmada por el cliente"
+          }
+        ],
+        "version": 7,
+        "diagnostico": {
+          "hallazgos": [
+            {
+              "componente": "Freno delantero",
+              "condicion": "Desgastado",
+              "descripcion": "Pastillas agotadas",
+              "prioridad": "alta",
+              "observaciones": "Requiere sustitución",
+              "accionesRecomendadas": [
+                "Cambiar pastillas"
+              ],
+              "tecnicoId": "6b07bcffc58eb8b5106951d0"
+            }
+          ],
+          "evidencias": [
+            {
+              "nombreArchivo": "diagnostico.jpg",
+              "descripcion": "Desgaste encontrado",
+              "ubicacion": "/evidencias/diagnostico.jpg"
+            }
+          ]
+        },
+        "revisionEntrega": {
+          "puntosVerificados": [
+            {
+              "punto": "Frenado",
+              "resultado": "Correcto"
+            },
+            {
+              "punto": "Accesorios",
+              "resultado": "Completos"
+            }
+          ],
+          "resultado": "Bicicleta revisada",
+          "aprobada": true,
+          "recomendaciones": [
+            "Revisar desgaste mensualmente"
+          ]
+        },
+        "entrega": {
+          "confirmacionRecepcionCliente": true,
+          "fecha": "2026-11-26T05:00:51.758+00:00"
+        }
+      }
+    },
+    {
+      "solicitud": "34 Registrar valoración",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/valoracion",
+      "estado": 201,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d6",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "citaId": "6b07bd01c58eb8b5106951d5",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Ruido al frenar",
+          "condicionesObservadas": "Desgaste de pastillas",
+          "accesorios": [
+            "Luz delantera"
+          ],
+          "fotografias": [
+            {
+              "nombreArchivo": "freno.jpg",
+              "descripcion": "Estado inicial del freno",
+              "ubicacion": "/evidencias/freno.jpg"
+            }
+          ]
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+        "estado": "entregada",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:49.461+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          },
+          {
+            "estado": "en diagnostico",
+            "fecha": "2026-11-26T05:00:49.678+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Registro de hallazgos"
+          },
+          {
+            "estado": "pendiente de autorizacion",
+            "fecha": "2026-11-26T05:00:49.773+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Trabajo propuesto para autorización"
+          },
+          {
+            "estado": "en ejecucion",
+            "fecha": "2026-11-26T05:00:50.287+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951d0",
+            "observacion": "Inicio de trabajo autorizado"
+          },
+          {
+            "estado": "lista para entrega",
+            "fecha": "2026-11-26T05:00:51.663+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Revisión aprobada"
+          },
+          {
+            "estado": "entregada",
+            "fecha": "2026-11-26T05:00:51.758+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción confirmada por el cliente"
+          }
+        ],
+        "version": 7,
+        "diagnostico": {
+          "hallazgos": [
+            {
+              "componente": "Freno delantero",
+              "condicion": "Desgastado",
+              "descripcion": "Pastillas agotadas",
+              "prioridad": "alta",
+              "observaciones": "Requiere sustitución",
+              "accionesRecomendadas": [
+                "Cambiar pastillas"
+              ],
+              "tecnicoId": "6b07bcffc58eb8b5106951d0"
+            }
+          ],
+          "evidencias": [
+            {
+              "nombreArchivo": "diagnostico.jpg",
+              "descripcion": "Desgaste encontrado",
+              "ubicacion": "/evidencias/diagnostico.jpg"
+            }
+          ]
+        },
+        "revisionEntrega": {
+          "puntosVerificados": [
+            {
+              "punto": "Frenado",
+              "resultado": "Correcto"
+            },
+            {
+              "punto": "Accesorios",
+              "resultado": "Completos"
+            }
+          ],
+          "resultado": "Bicicleta revisada",
+          "aprobada": true,
+          "recomendaciones": [
+            "Revisar desgaste mensualmente"
+          ]
+        },
+        "entrega": {
+          "confirmacionRecepcionCliente": true,
+          "fecha": "2026-11-26T05:00:51.758+00:00"
+        },
+        "valoracionServicio": {
+          "calificacion": 5,
+          "comentarios": "Buen servicio",
+          "sugerencias": "Conservar la atención"
+        }
+      }
+    },
+    {
+      "solicitud": "35 Rechazar valoración duplicada",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd01c58eb8b5106951d6/valoracion",
+      "estado": 409,
+      "respuesta": {
+        "error": "La orden ya tiene valoración"
+      }
+    },
+    {
+      "solicitud": "36 Registrar garantía",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/trabajos/6b07bd01c58eb8b5106951d7/garantia",
+      "estado": 201,
+      "respuesta": {
+        "_id": "6b07bd01c58eb8b5106951d7",
+        "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+        "componente": "Freno delantero",
+        "manoObraEstimada": 30000,
+        "repuestosPrevistos": [
+          {
+            "repuestoId": "6b07bd00c58eb8b5106951d4",
+            "cantidad": 2,
+            "precioUnitarioEstimado": 20000,
+            "nombre": "Pastillas",
+            "especificaciones": "Compatibles con freno de disco"
+          }
+        ],
+        "observaciones": "Presupuesto sujeto a autorización",
+        "ordenId": "6b07bd01c58eb8b5106951d6",
+        "autorizacion": {
+          "decision": "autorizado",
+          "comentarios": "Acepto presupuesto",
+          "fecha": "2026-11-26T05:00:50.071+00:00"
+        },
+        "servicio": {
+          "servicioId": "6b07bd00c58eb8b5106951d3",
+          "nombre": "Ajuste de frenos",
+          "descripcion": "Ajuste y revisión de frenado"
+        },
+        "ejecucion": {
+          "estado": "finalizado",
+          "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+          "repuestosUtilizados": [
+            {
+              "repuestoId": "6b07bd00c58eb8b5106951d4",
+              "cantidad": 2,
+              "precioUnitarioAplicado": 19000,
+              "nombre": "Pastillas",
+              "especificaciones": "Compatibles con freno de disco"
+            }
+          ],
+          "fechaInicio": "2026-11-26T05:00:50.281+00:00",
+          "fechaFinalizacion": "2026-11-26T05:00:50.686+00:00"
+        },
+        "tecnicoId": "6b07bcffc58eb8b5106951d0",
+        "revision": {
+          "puntosVerificados": [
+            {
+              "punto": "Frenado",
+              "resultado": "Correcto"
+            }
+          ],
+          "resultado": "Prueba superada",
+          "aprobada": true,
+          "recomendaciones": [
+            "Revisar periódicamente"
+          ]
+        },
+        "garantia": {
+          "duracion": 30,
+          "fechaInicio": "2026-11-26T05:00:51.758+00:00",
+          "condiciones": "Defectos del servicio aplicado",
+          "exclusiones": "Golpes y desgaste normal"
+        }
+      }
+    },
+    {
+      "solicitud": "37 Reportar inconveniente en garantía",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/garantias/solicitudes",
+      "estado": 201,
+      "respuesta": {
+        "trabajoId": "6b07bd01c58eb8b5106951d7",
+        "descripcion": "Reapareció ruido",
+        "evidencias": [
+          {
+            "nombreArchivo": "ruido.txt",
+            "descripcion": "Descripción del inconveniente",
+            "ubicacion": "/evidencias/ruido.txt"
+          }
+        ],
+        "_id": "6b07bd04c58eb8b5106951d9",
+        "fecha": "2026-11-26T05:00:52.142+00:00",
+        "estado": "solicitada"
+      }
+    },
+    {
+      "solicitud": "38 Resolver garantía",
+      "metodo": "PATCH",
+      "ruta": "http://127.0.0.1:3101/api/garantias/solicitudes/6b07bd04c58eb8b5106951d9",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd04c58eb8b5106951d9",
+        "trabajoId": "6b07bd01c58eb8b5106951d7",
+        "descripcion": "Reapareció ruido",
+        "evidencias": [
+          {
+            "nombreArchivo": "ruido.txt",
+            "descripcion": "Descripción del inconveniente",
+            "ubicacion": "/evidencias/ruido.txt"
+          }
+        ],
+        "fecha": "2026-11-26T05:00:52.142+00:00",
+        "estado": "resuelta",
+        "procede": true,
+        "solucionAplicada": "Ajuste de asentamiento realizado"
+      }
+    },
+    {
+      "solicitud": "39 Consultar historial",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/bicicletas/6b07bd00c58eb8b5106951d2/historial",
+      "estado": 200,
+      "respuesta": [
+        {
+          "_id": "6b07bd01c58eb8b5106951d6",
+          "clienteId": "6b07bcffc58eb8b5106951d1",
+          "citaId": "6b07bd01c58eb8b5106951d5",
+          "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+          "tecnicosAsignados": [
+            "6b07bcffc58eb8b5106951d0"
+          ],
+          "recepcion": {
+            "problemaReportado": "Ruido al frenar",
+            "condicionesObservadas": "Desgaste de pastillas",
+            "accesorios": [
+              "Luz delantera"
+            ],
+            "fotografias": [
+              {
+                "nombreArchivo": "freno.jpg",
+                "descripcion": "Estado inicial del freno",
+                "ubicacion": "/evidencias/freno.jpg"
+              }
+            ]
+          },
+          "bicicleta": {
+            "bicicletaId": "6b07bd00c58eb8b5106951d2",
+            "marca": "Trek",
+            "modelo": "Marlin",
+            "tipo": "montana",
+            "color": "Azul",
+            "numeroSerie": null,
+            "caracteristicas": {
+              "material": "Aluminio",
+              "suspension": {
+                "informacion": "Delantera",
+                "recorrido": 100
+              }
+            }
+          },
+          "coordinadorId": "6b07bcffc58eb8b5106951cf",
+          "fechaRecepcion": "2026-11-26T05:00:49.461+00:00",
+          "estado": "entregada",
+          "historialEstados": [
+            {
+              "estado": "recibida",
+              "fecha": "2026-11-26T05:00:49.461+00:00",
+              "usuarioId": "6b07bcffc58eb8b5106951cf",
+              "observacion": "Recepción de bicicleta"
+            },
+            {
+              "estado": "en diagnostico",
+              "fecha": "2026-11-26T05:00:49.678+00:00",
+              "usuarioId": "6b07bcffc58eb8b5106951d0",
+              "observacion": "Registro de hallazgos"
+            },
+            {
+              "estado": "pendiente de autorizacion",
+              "fecha": "2026-11-26T05:00:49.773+00:00",
+              "usuarioId": "6b07bcffc58eb8b5106951d0",
+              "observacion": "Trabajo propuesto para autorización"
+            },
+            {
+              "estado": "en ejecucion",
+              "fecha": "2026-11-26T05:00:50.287+00:00",
+              "usuarioId": "6b07bcffc58eb8b5106951d0",
+              "observacion": "Inicio de trabajo autorizado"
+            },
+            {
+              "estado": "lista para entrega",
+              "fecha": "2026-11-26T05:00:51.663+00:00",
+              "usuarioId": "6b07bcffc58eb8b5106951cf",
+              "observacion": "Revisión aprobada"
+            },
+            {
+              "estado": "entregada",
+              "fecha": "2026-11-26T05:00:51.758+00:00",
+              "usuarioId": "6b07bcffc58eb8b5106951cf",
+              "observacion": "Recepción confirmada por el cliente"
+            }
+          ],
+          "version": 7,
+          "diagnostico": {
+            "hallazgos": [
+              {
+                "componente": "Freno delantero",
+                "condicion": "Desgastado",
+                "descripcion": "Pastillas agotadas",
+                "prioridad": "alta",
+                "observaciones": "Requiere sustitución",
+                "accionesRecomendadas": [
+                  "Cambiar pastillas"
+                ],
+                "tecnicoId": "6b07bcffc58eb8b5106951d0"
+              }
+            ],
+            "evidencias": [
+              {
+                "nombreArchivo": "diagnostico.jpg",
+                "descripcion": "Desgaste encontrado",
+                "ubicacion": "/evidencias/diagnostico.jpg"
+              }
+            ]
+          },
+          "revisionEntrega": {
+            "puntosVerificados": [
+              {
+                "punto": "Frenado",
+                "resultado": "Correcto"
+              },
+              {
+                "punto": "Accesorios",
+                "resultado": "Completos"
+              }
+            ],
+            "resultado": "Bicicleta revisada",
+            "aprobada": true,
+            "recomendaciones": [
+              "Revisar desgaste mensualmente"
+            ]
+          },
+          "entrega": {
+            "confirmacionRecepcionCliente": true,
+            "fecha": "2026-11-26T05:00:51.758+00:00"
+          },
+          "valoracionServicio": {
+            "calificacion": 5,
+            "comentarios": "Buen servicio",
+            "sugerencias": "Conservar la atención"
+          },
+          "trabajos": [
+            {
+              "_id": "6b07bd01c58eb8b5106951d7",
+              "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+              "componente": "Freno delantero",
+              "manoObraEstimada": 30000,
+              "repuestosPrevistos": [
+                {
+                  "repuestoId": "6b07bd00c58eb8b5106951d4",
+                  "cantidad": 2,
+                  "precioUnitarioEstimado": 20000,
+                  "nombre": "Pastillas",
+                  "especificaciones": "Compatibles con freno de disco"
+                }
+              ],
+              "observaciones": "Presupuesto sujeto a autorización",
+              "ordenId": "6b07bd01c58eb8b5106951d6",
+              "autorizacion": {
+                "decision": "autorizado",
+                "comentarios": "Acepto presupuesto",
+                "fecha": "2026-11-26T05:00:50.071+00:00"
+              },
+              "servicio": {
+                "servicioId": "6b07bd00c58eb8b5106951d3",
+                "nombre": "Ajuste de frenos",
+                "descripcion": "Ajuste y revisión de frenado"
+              },
+              "ejecucion": {
+                "estado": "finalizado",
+                "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+                "repuestosUtilizados": [
+                  {
+                    "repuestoId": "6b07bd00c58eb8b5106951d4",
+                    "cantidad": 2,
+                    "precioUnitarioAplicado": 19000,
+                    "nombre": "Pastillas",
+                    "especificaciones": "Compatibles con freno de disco"
+                  }
+                ],
+                "fechaInicio": "2026-11-26T05:00:50.281+00:00",
+                "fechaFinalizacion": "2026-11-26T05:00:50.686+00:00"
+              },
+              "tecnicoId": "6b07bcffc58eb8b5106951d0",
+              "revision": {
+                "puntosVerificados": [
+                  {
+                    "punto": "Frenado",
+                    "resultado": "Correcto"
+                  }
+                ],
+                "resultado": "Prueba superada",
+                "aprobada": true,
+                "recomendaciones": [
+                  "Revisar periódicamente"
+                ]
+              },
+              "garantia": {
+                "duracion": 30,
+                "fechaInicio": "2026-11-26T05:00:51.758+00:00",
+                "condiciones": "Defectos del servicio aplicado",
+                "exclusiones": "Golpes y desgaste normal"
+              }
+            },
+            {
+              "_id": "6b07bd02c58eb8b5106951d8",
+              "descripcionIntervencion": "Ajustar transmisión",
+              "componente": "Cambio trasero",
+              "manoObraEstimada": 15000,
+              "observaciones": "Intervención adicional requiere decisión",
+              "repuestosPrevistos": [],
+              "ordenId": "6b07bd01c58eb8b5106951d6",
+              "autorizacion": {
+                "decision": "rechazado",
+                "comentarios": "Lo haré en otra visita",
+                "fecha": "2026-11-26T05:00:50.929+00:00"
+              }
+            }
+          ],
+          "intervencionesRealizadas": [
+            {
+              "_id": "6b07bd01c58eb8b5106951d7",
+              "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+              "componente": "Freno delantero",
+              "manoObraEstimada": 30000,
+              "repuestosPrevistos": [
+                {
+                  "repuestoId": "6b07bd00c58eb8b5106951d4",
+                  "cantidad": 2,
+                  "precioUnitarioEstimado": 20000,
+                  "nombre": "Pastillas",
+                  "especificaciones": "Compatibles con freno de disco"
+                }
+              ],
+              "observaciones": "Presupuesto sujeto a autorización",
+              "ordenId": "6b07bd01c58eb8b5106951d6",
+              "autorizacion": {
+                "decision": "autorizado",
+                "comentarios": "Acepto presupuesto",
+                "fecha": "2026-11-26T05:00:50.071+00:00"
+              },
+              "servicio": {
+                "servicioId": "6b07bd00c58eb8b5106951d3",
+                "nombre": "Ajuste de frenos",
+                "descripcion": "Ajuste y revisión de frenado"
+              },
+              "ejecucion": {
+                "estado": "finalizado",
+                "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+                "repuestosUtilizados": [
+                  {
+                    "repuestoId": "6b07bd00c58eb8b5106951d4",
+                    "cantidad": 2,
+                    "precioUnitarioAplicado": 19000,
+                    "nombre": "Pastillas",
+                    "especificaciones": "Compatibles con freno de disco"
+                  }
+                ],
+                "fechaInicio": "2026-11-26T05:00:50.281+00:00",
+                "fechaFinalizacion": "2026-11-26T05:00:50.686+00:00"
+              },
+              "tecnicoId": "6b07bcffc58eb8b5106951d0",
+              "revision": {
+                "puntosVerificados": [
+                  {
+                    "punto": "Frenado",
+                    "resultado": "Correcto"
+                  }
+                ],
+                "resultado": "Prueba superada",
+                "aprobada": true,
+                "recomendaciones": [
+                  "Revisar periódicamente"
+                ]
+              },
+              "garantia": {
+                "duracion": 30,
+                "fechaInicio": "2026-11-26T05:00:51.758+00:00",
+                "condiciones": "Defectos del servicio aplicado",
+                "exclusiones": "Golpes y desgaste normal"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "solicitud": "40 Consultar estadísticas",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/estadisticas",
+      "estado": 200,
+      "respuesta": {
+        "tiemposAtencion": [
+          {
+            "_id": null,
+            "ordenes": 1,
+            "promedioHoras": 0.0006380555555555556
+          }
+        ],
+        "ordenesPorEstado": [
+          {
+            "_id": "entregada",
+            "cantidad": 1
+          }
+        ],
+        "serviciosMasSolicitados": [
+          {
+            "_id": "6b07bd00c58eb8b5106951d3",
+            "nombre": "Ajuste de frenos",
+            "propuestas": 1,
+            "autorizados": 1
+          }
+        ],
+        "valoraciones": [
+          {
+            "_id": null,
+            "cantidad": 1,
+            "promedio": 5
+          }
+        ]
+      }
+    },
+    {
+      "solicitud": "41 Cliente no consulta estadísticas globales",
+      "metodo": "GET",
+      "ruta": "http://127.0.0.1:3101/api/estadisticas",
+      "estado": 403,
+      "respuesta": {
+        "error": "Rol sin permiso"
+      }
+    },
+    {
+      "solicitud": "42 Nueva recepción sin cita tras entrega",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes",
+      "estado": 201,
+      "respuesta": {
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Nueva revisión",
+          "condicionesObservadas": "Uso habitual",
+          "accesorios": [],
+          "fotografias": []
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:52.689+00:00",
+        "estado": "recibida",
+        "_id": "6b07bd04c58eb8b5106951da",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:52.689+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          }
+        ],
+        "version": 0
+      }
+    },
+    {
+      "solicitud": "43 Cancelar segunda orden",
+      "metodo": "POST",
+      "ruta": "http://127.0.0.1:3101/api/ordenes/6b07bd04c58eb8b5106951da/estado",
+      "estado": 200,
+      "respuesta": {
+        "_id": "6b07bd04c58eb8b5106951da",
+        "clienteId": "6b07bcffc58eb8b5106951d1",
+        "fechaEstimadaEntrega": "2026-12-03T05:00:48.161+00:00",
+        "tecnicosAsignados": [
+          "6b07bcffc58eb8b5106951d0"
+        ],
+        "recepcion": {
+          "problemaReportado": "Nueva revisión",
+          "condicionesObservadas": "Uso habitual",
+          "accesorios": [],
+          "fotografias": []
+        },
+        "bicicleta": {
+          "bicicletaId": "6b07bd00c58eb8b5106951d2",
+          "marca": "Trek",
+          "modelo": "Marlin",
+          "tipo": "montana",
+          "color": "Azul",
+          "numeroSerie": null,
+          "caracteristicas": {
+            "material": "Aluminio",
+            "suspension": {
+              "informacion": "Delantera",
+              "recorrido": 100
+            }
+          }
+        },
+        "coordinadorId": "6b07bcffc58eb8b5106951cf",
+        "fechaRecepcion": "2026-11-26T05:00:52.689+00:00",
+        "estado": "cancelada",
+        "historialEstados": [
+          {
+            "estado": "recibida",
+            "fecha": "2026-11-26T05:00:52.689+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Recepción de bicicleta"
+          },
+          {
+            "estado": "cancelada",
+            "fecha": "2026-11-26T05:00:52.799+00:00",
+            "usuarioId": "6b07bcffc58eb8b5106951cf",
+            "observacion": "Cliente desiste antes del diagnóstico"
+          }
+        ],
+        "version": 0
+      }
+    }
+  ]
+}

@@ -47,7 +47,9 @@ La API añade ordenId, copia del servicio, nombre y especificaciones del repuest
 
 ## Consultas incluidas
 
-`database/consultas.mongosh.js` contiene consultas ejecutables de solo lectura: bicicletas por propietario, agenda, órdenes activas, historial con `$lookup`, suma de presupuesto, órdenes por estado, servicios propuestos, tiempos de atención y valoraciones.
+`database/consultas.mongosh.js` contiene las cinco agregaciones de análisis de la entrega: servicios propuestos y valor monetario; órdenes por tipo y estado; calificación por tipo de bicicleta; tiempos mensuales de atención; y garantías enlazadas con sus trabajos mediante `$lookup`.
+
+Para crear colecciones/validadores y cargar los documentos sintéticos, inicia primero Spring Boot y ejecuta desde la raíz: `mongosh "mongodb://localhost:27017/taller_bicicletas" --file database/crear-cargar-demo.mongosh.js`. El cargador conserva usuarios y se detiene si las otras colecciones ya tienen documentos. Después ejecuta las agregaciones con `mongosh "mongodb://localhost:27017/taller_bicicletas" --file database/consultas.mongosh.js` o copia cada pipeline en Compass. Los resultados incluidos en el informe son de esa carga sintética; al consultar otra base se obtendrán sus propios resultados.
 
 Las consultas de API aplican además filtros por usuario. Ejecutar una consulta administrativa en mongosh no sustituye esos controles.
 

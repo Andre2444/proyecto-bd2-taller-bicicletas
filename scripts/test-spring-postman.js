@@ -18,10 +18,31 @@ try {
   for(const name of ['citas','ordenesServicio']){const indexes=await client.db('spring_smoke').collection(name).indexes();if(!indexes.some(i=>i.unique&&i.partialFilterExpression))throw new Error('Falta índice único parcial: '+name);}
   const collection=JSON.parse(await readFile('postman/BD2.postman_collection.json','utf8'));
   const runner=newman.run({collection,environment:{values},reporters:'cli'});
+  const responseEvidence=[];
+  runner.on('request',(err,args)=>{
+    if(err||!args?.response)return;
+    let body=args.response.stream?.toString('utf8')??'';
+    try{body=JSON.parse(body);}catch{}
+    const clean=value=>{
+      if(Array.isArray(value))return value.map(clean);
+      if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value)
+        .filter(([key])=>!/(token|secret|password|credential)/i.test(key))
+        .map(([key,item])=>[key,clean(item)]));
+      if(typeof value==='string')return value.replace(/[a-f0-9]{64}/gi,'[token omitido]');
+      return value;
+    };
+    responseEvidence.push({solicitud:args.item?.name,metodo:args.request?.method,
+      ruta:args.request?.url?.toString(),estado:args.response.code,
+      respuesta:clean(body)});
+  });
   const summary=await new Promise((resolve,reject)=>runner.on('done',(err,result)=>err?reject(err):resolve(result)));
   const evidence={generadoEn:new Date().toISOString(),herramienta:'Newman contra Spring Boot y MongoDB replica set temporal',estadisticas:summary.run.stats,errores:summary.run.failures.map(f=>({caso:f.source?.name,mensaje:f.error?.message}))};
   await mkdir('docs/evidencias',{recursive:true});
   await writeFile('docs/evidencias/resultados-spring-postman.json',JSON.stringify(evidence,null,2));
+  await writeFile('docs/evidencias/respuestas-spring-postman.json',JSON.stringify({
+    nota:'Respuestas observadas durante la ejecución automatizada en MongoDB temporal. Se omiten campos de token y secretos.',
+    solicitudes:responseEvidence
+  },null,2));
   console.log(`Spring Newman: ${summary.run.stats.requests.total} solicitudes, ${summary.run.stats.assertions.total} aserciones, ${summary.run.failures.length} fallos.`);
   if(summary.run.failures.length){for(const line of logs.split(/\r?\n/).filter(line=>line.includes('Error interno de API:')))console.error(line);}
   if(summary.run.failures.length)process.exitCode=1;

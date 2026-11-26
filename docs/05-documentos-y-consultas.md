@@ -4,7 +4,7 @@
 
 La carga inicial crea tres documentos en `usuarios`, uno por rol. La colección Postman crea bicicleta, servicio, repuesto, cita, orden, diagnóstico, trabajos, ejecución, revisión, entrega, valoración y solicitud de garantía en orden de dependencias. Los identificadores se obtienen de respuestas reales; no se usan ObjectId ficticios como referencias inexistentes.
 
-El esquema BSON completo se encuentra en `database/esquemas.mongodb.json`. `database/crear-colecciones.mongosh.js` permite inspeccionar y crear las ocho colecciones en una base nueva mediante mongosh. Para instalar además todos los índices se utiliza `npm run db:init`.
+La API instala los validadores de database/esquemas.mongodb.json y los índices de src/db.js al iniciar.
 
 ## Documento de entrada: bicicleta
 

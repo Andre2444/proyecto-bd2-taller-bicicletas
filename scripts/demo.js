@@ -1,11 +1,11 @@
-import { MongoMemoryReplSet } from 'mongodb-memory-server';
+import { iniciarMongoTemporal } from './mongo-temporal.js';
 import { MongoClient } from 'mongodb';
 import { initDb } from '../src/db.js';
 import { createApp } from '../src/app.js';
 import { seed } from './seed.js';
 // Instancia real y temporal de MongoDB. Para conservar datos, usar npm start
 // con un replica set persistente o MongoDB Atlas.
-const repl = await MongoMemoryReplSet.create({ replSet: { count: 1 }, binary: { version: '7.0.14', downloadDir: '.local/mongodb-binaries' } });
+const repl = await iniciarMongoTemporal();
 const client = new MongoClient(repl.getUri());
 await client.connect();
 const db = client.db('taller_demo');

@@ -333,6 +333,37 @@
       "observacionCambio": {
         "bsonType": "string",
         "minLength": 1
+      },
+      "cambiosHorario": {
+        "bsonType": "array",
+        "items": {
+          "bsonType": "object",
+          "properties": {
+            "anterior": {
+              "bsonType": "date"
+            },
+            "nueva": {
+              "bsonType": "date"
+            },
+            "fecha": {
+              "bsonType": "date"
+            },
+            "usuarioId": {
+              "bsonType": "objectId"
+            },
+            "observacion": {
+              "bsonType": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "anterior",
+            "nueva",
+            "fecha",
+            "usuarioId",
+            "observacion"
+          ]
+        }
       }
     }
   },
@@ -707,6 +738,15 @@
           "descripcion": {
             "bsonType": "string",
             "minLength": 1
+          },
+          "precioReferencia": {
+            "bsonType": [
+              "int",
+              "long",
+              "double",
+              "decimal"
+            ],
+            "minimum": 0
           }
         }
       },
@@ -1024,6 +1064,12 @@
       "solucionAplicada": {
         "bsonType": "string",
         "minLength": 1
+      },
+      "revisadoPorId": {
+        "bsonType": "objectId"
+      },
+      "revisadaEn": {
+        "bsonType": "date"
       }
     }
   }

@@ -1,11 +1,11 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
-import { MongoMemoryReplSet } from 'mongodb-memory-server';
+import { iniciarMongoTemporal } from './mongo-temporal.js';
 import { MongoClient } from 'mongodb';
 import newman from 'newman';
 import { initDb } from '../src/db.js';
 import { createApp } from '../src/app.js';
 import { createUser } from '../src/auth.js';
-const repl = await MongoMemoryReplSet.create({ replSet: { count: 1 }, binary: { version: '7.0.14', downloadDir: '.local/mongodb-binaries' } });
+const repl = await iniciarMongoTemporal();
 const client = new MongoClient(repl.getUri());
 let server;
 try {

@@ -2,7 +2,7 @@
   "usuarios": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdef7"
+        "$oid": "6b0799a6bde65496bbbae41d"
       },
       "nombreCompleto": "coordinador",
       "documento": "coordinador",
@@ -13,7 +13,7 @@
     },
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdef8"
+        "$oid": "6b0799a6bde65496bbbae41e"
       },
       "nombreCompleto": "tecnico",
       "documento": "tecnico",
@@ -24,7 +24,7 @@
     },
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdef9"
+        "$oid": "6b0799a6bde65496bbbae41f"
       },
       "nombreCompleto": "cliente",
       "documento": "cliente",
@@ -37,10 +37,10 @@
   "bicicletas": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdefa"
+        "$oid": "6b0799a7bde65496bbbae420"
       },
       "propietarioId": {
-        "$oid": "6af7dd85529507e3c32bdef9"
+        "$oid": "6b0799a6bde65496bbbae41f"
       },
       "marca": "Trek",
       "modelo": "Marlin",
@@ -60,7 +60,7 @@
   "servicios": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdefb"
+        "$oid": "6b0799a7bde65496bbbae421"
       },
       "nombre": "Ajuste de frenos",
       "categoria": "frenos",
@@ -85,7 +85,7 @@
   "repuestos": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdefc"
+        "$oid": "6b0799a7bde65496bbbae422"
       },
       "nombre": "Pastillas nuevo catálogo",
       "especificaciones": "Compatibles con freno de disco",
@@ -97,49 +97,72 @@
   "citas": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdefd"
+        "$oid": "6b0799a7bde65496bbbae423"
       },
       "clienteId": {
-        "$oid": "6af7dd85529507e3c32bdef9"
+        "$oid": "6b0799a6bde65496bbbae41f"
       },
       "bicicletaId": {
-        "$oid": "6af7dd85529507e3c32bdefa"
+        "$oid": "6b0799a7bde65496bbbae420"
       },
       "fechaHora": {
         "$date": {
-          "$numberLong": "1794801797471"
+          "$numberLong": "1795832998960"
         }
       },
       "motivo": "Revisar frenos",
       "problemasObservados": "Ruido al frenar",
       "serviciosInteres": [
         {
-          "$oid": "6af7dd85529507e3c32bdefb"
+          "$oid": "6b0799a7bde65496bbbae421"
         }
       ],
       "estado": "atendida",
+      "cambiosHorario": [
+        {
+          "anterior": {
+            "$date": {
+              "$numberLong": "1795746598958"
+            }
+          },
+          "nueva": {
+            "$date": {
+              "$numberLong": "1795832998960"
+            }
+          },
+          "fecha": {
+            "$date": {
+              "$numberLong": "1795660199176"
+            }
+          },
+          "usuarioId": {
+            "$oid": "6b0799a6bde65496bbbae41d"
+          },
+          "observacion": "Disponibilidad confirmada por coordinador"
+        }
+      ],
       "observacionCambio": "Disponibilidad confirmada por coordinador"
     }
   ],
   "ordenesServicio": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdeff"
+        "$oid": "6b0799a7bde65496bbbae425"
       },
       "clienteId": {
-        "$oid": "6af7dd85529507e3c32bdef9"
+        "$oid": "6b0799a6bde65496bbbae41f"
       },
       "citaId": {
-        "$oid": "6af7dd85529507e3c32bdefd"
+        "$oid": "6b0799a7bde65496bbbae423"
       },
       "fechaEstimadaEntrega": {
         "$date": {
-          "$numberLong": "1795233797471"
+          "$numberLong": "1796264998960"
         }
       },
       "tecnicosAsignados": [
         {
-          "$oid": "6af7dd85529507e3c32bdef8"
+          "$oid": "6b0799a6bde65496bbbae41e"
         }
       ],
       "recepcion": {
@@ -158,7 +181,7 @@
       },
       "bicicleta": {
         "bicicletaId": {
-          "$oid": "6af7dd85529507e3c32bdefa"
+          "$oid": "6b0799a7bde65496bbbae420"
         },
         "marca": "Trek",
         "modelo": "Marlin",
@@ -175,11 +198,11 @@
         }
       },
       "coordinadorId": {
-        "$oid": "6af7dd85529507e3c32bdef7"
+        "$oid": "6b0799a6bde65496bbbae41d"
       },
       "fechaRecepcion": {
         "$date": {
-          "$numberLong": "1794628997603"
+          "$numberLong": "1795660199196"
         }
       },
       "estado": "entregada",
@@ -191,11 +214,11 @@
           "estado": "recibida",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997603"
+              "$numberLong": "1795660199196"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef7"
+            "$oid": "6b0799a6bde65496bbbae41d"
           },
           "observacion": "Recepción de bicicleta"
         },
@@ -203,11 +226,11 @@
           "estado": "en diagnostico",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997634"
+              "$numberLong": "1795660199229"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef8"
+            "$oid": "6b0799a6bde65496bbbae41e"
           },
           "observacion": "Registro de hallazgos"
         },
@@ -215,11 +238,11 @@
           "estado": "pendiente de autorizacion",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997647"
+              "$numberLong": "1795660199249"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef8"
+            "$oid": "6b0799a6bde65496bbbae41e"
           },
           "observacion": "Trabajo propuesto para autorización"
         },
@@ -227,11 +250,11 @@
           "estado": "en ejecucion",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997689"
+              "$numberLong": "1795660199315"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef8"
+            "$oid": "6b0799a6bde65496bbbae41e"
           },
           "observacion": "Inicio de trabajo autorizado"
         },
@@ -239,11 +262,11 @@
           "estado": "lista para entrega",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997802"
+              "$numberLong": "1795660199488"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef7"
+            "$oid": "6b0799a6bde65496bbbae41d"
           },
           "observacion": "Revisión aprobada"
         },
@@ -251,11 +274,11 @@
           "estado": "entregada",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997813"
+              "$numberLong": "1795660199503"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef7"
+            "$oid": "6b0799a6bde65496bbbae41d"
           },
           "observacion": "Recepción confirmada por el cliente"
         }
@@ -272,7 +295,7 @@
               "Cambiar pastillas"
             ],
             "tecnicoId": {
-              "$oid": "6af7dd85529507e3c32bdef8"
+              "$oid": "6b0799a6bde65496bbbae41e"
             }
           }
         ],
@@ -305,7 +328,7 @@
         "confirmacionRecepcionCliente": true,
         "fecha": {
           "$date": {
-            "$numberLong": "1794628997812"
+            "$numberLong": "1795660199502"
           }
         }
       },
@@ -319,19 +342,19 @@
     },
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdf04"
+        "$oid": "6b0799a7bde65496bbbae42a"
       },
       "clienteId": {
-        "$oid": "6af7dd85529507e3c32bdef9"
+        "$oid": "6b0799a6bde65496bbbae41f"
       },
       "fechaEstimadaEntrega": {
         "$date": {
-          "$numberLong": "1795233797471"
+          "$numberLong": "1796264998960"
         }
       },
       "tecnicosAsignados": [
         {
-          "$oid": "6af7dd85529507e3c32bdef8"
+          "$oid": "6b0799a6bde65496bbbae41e"
         }
       ],
       "recepcion": {
@@ -342,7 +365,7 @@
       },
       "bicicleta": {
         "bicicletaId": {
-          "$oid": "6af7dd85529507e3c32bdefa"
+          "$oid": "6b0799a7bde65496bbbae420"
         },
         "marca": "Trek",
         "modelo": "Marlin",
@@ -359,11 +382,11 @@
         }
       },
       "coordinadorId": {
-        "$oid": "6af7dd85529507e3c32bdef7"
+        "$oid": "6b0799a6bde65496bbbae41d"
       },
       "fechaRecepcion": {
         "$date": {
-          "$numberLong": "1794628997900"
+          "$numberLong": "1795660199640"
         }
       },
       "estado": "cancelada",
@@ -375,11 +398,11 @@
           "estado": "recibida",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997900"
+              "$numberLong": "1795660199640"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef7"
+            "$oid": "6b0799a6bde65496bbbae41d"
           },
           "observacion": "Recepción de bicicleta"
         },
@@ -387,11 +410,11 @@
           "estado": "cancelada",
           "fecha": {
             "$date": {
-              "$numberLong": "1794628997910"
+              "$numberLong": "1795660199653"
             }
           },
           "usuarioId": {
-            "$oid": "6af7dd85529507e3c32bdef7"
+            "$oid": "6b0799a6bde65496bbbae41d"
           },
           "observacion": "Cliente desiste antes del diagnóstico"
         }
@@ -401,7 +424,7 @@
   "trabajosOrden": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdf01"
+        "$oid": "6b0799a7bde65496bbbae427"
       },
       "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
       "componente": "Freno delantero",
@@ -411,7 +434,7 @@
       "repuestosPrevistos": [
         {
           "repuestoId": {
-            "$oid": "6af7dd85529507e3c32bdefc"
+            "$oid": "6b0799a7bde65496bbbae422"
           },
           "cantidad": {
             "$numberInt": "2"
@@ -426,20 +449,23 @@
       "observaciones": "Presupuesto sujeto a autorización",
       "servicio": {
         "servicioId": {
-          "$oid": "6af7dd85529507e3c32bdefb"
+          "$oid": "6b0799a7bde65496bbbae421"
         },
         "nombre": "Ajuste de frenos",
-        "descripcion": "Ajuste y revisión de frenado"
+        "descripcion": "Ajuste y revisión de frenado",
+        "precioReferencia": {
+          "$numberInt": "30000"
+        }
       },
       "ordenId": {
-        "$oid": "6af7dd85529507e3c32bdeff"
+        "$oid": "6b0799a7bde65496bbbae425"
       },
       "autorizacion": {
         "decision": "autorizado",
         "comentarios": "Acepto presupuesto",
         "fecha": {
           "$date": {
-            "$numberLong": "1794628997672"
+            "$numberLong": "1795660199292"
           }
         }
       },
@@ -449,7 +475,7 @@
         "repuestosUtilizados": [
           {
             "repuestoId": {
-              "$oid": "6af7dd85529507e3c32bdefc"
+              "$oid": "6b0799a7bde65496bbbae422"
             },
             "cantidad": {
               "$numberInt": "2"
@@ -463,17 +489,17 @@
         ],
         "fechaInicio": {
           "$date": {
-            "$numberLong": "1794628997688"
+            "$numberLong": "1795660199314"
           }
         },
         "fechaFinalizacion": {
           "$date": {
-            "$numberLong": "1794628997722"
+            "$numberLong": "1795660199359"
           }
         }
       },
       "tecnicoId": {
-        "$oid": "6af7dd85529507e3c32bdef8"
+        "$oid": "6b0799a6bde65496bbbae41e"
       },
       "revision": {
         "puntosVerificados": [
@@ -494,7 +520,7 @@
         },
         "fechaInicio": {
           "$date": {
-            "$numberLong": "1794628997812"
+            "$numberLong": "1795660199502"
           }
         },
         "condiciones": "Defectos del servicio aplicado",
@@ -503,7 +529,7 @@
     },
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdf02"
+        "$oid": "6b0799a7bde65496bbbae428"
       },
       "descripcionIntervencion": "Ajustar transmisión",
       "componente": "Cambio trasero",
@@ -513,14 +539,14 @@
       "repuestosPrevistos": [],
       "observaciones": "Intervención adicional requiere decisión",
       "ordenId": {
-        "$oid": "6af7dd85529507e3c32bdeff"
+        "$oid": "6b0799a7bde65496bbbae425"
       },
       "autorizacion": {
         "decision": "rechazado",
         "comentarios": "Lo haré en otra visita",
         "fecha": {
           "$date": {
-            "$numberLong": "1794628997743"
+            "$numberLong": "1795660199388"
           }
         }
       }
@@ -529,10 +555,10 @@
   "solicitudesGarantia": [
     {
       "_id": {
-        "$oid": "6af7dd85529507e3c32bdf03"
+        "$oid": "6b0799a7bde65496bbbae429"
       },
       "trabajoId": {
-        "$oid": "6af7dd85529507e3c32bdf01"
+        "$oid": "6b0799a7bde65496bbbae427"
       },
       "descripcion": "Reapareció ruido",
       "evidencias": [
@@ -544,11 +570,19 @@
       ],
       "fecha": {
         "$date": {
-          "$numberLong": "1794628997859"
+          "$numberLong": "1795660199554"
         }
       },
       "estado": "resuelta",
       "procede": true,
+      "revisadaEn": {
+        "$date": {
+          "$numberLong": "1795660199574"
+        }
+      },
+      "revisadoPorId": {
+        "$oid": "6b0799a6bde65496bbbae41d"
+      },
       "solucionAplicada": "Ajuste de asentamiento realizado"
     }
   ]

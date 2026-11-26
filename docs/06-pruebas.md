@@ -8,7 +8,8 @@ La versión de entrega Spring Boot se ejecutó contra **MongoDB 7.0.14 real**, e
 | --- | --- |
 | `npm run test:spring` | Colección Postman contra Spring Boot y MongoDB: 43 solicitudes, 47 aserciones, 0 fallos. |
 | Maven Wrapper | Compilación Java 21 correcta y JAR Spring Boot ejecutable generado. |
-| `npm test` / `npm run test:postman` | Pruebas de la implementación Express histórica. No sustituyen a `test:spring`. |
+| `npm test` | Express histórica: 51 pruebas correctas, incluyendo permisos, validadores, historial y concurrencia. |
+| `npm run test:postman` | Express histórica: 43 solicitudes, 47 aserciones, 0 fallos. |
 
 La colección se verificó con el motor Newman contra Spring Boot, no mediante clics en la aplicación gráfica de Postman. El archivo importable es el mismo que ejecutó Newman. `scripts/test-spring-postman.js` crea su propio replica set temporal, inicia el JAR, ejecuta la colección y guarda las estadísticas sin credenciales en `evidencias/resultados-spring-postman.json`.
 
@@ -23,7 +24,7 @@ No se incluyen capturas inventadas ni se afirma que estos resultados prueban una
 
 ## Flujo positivo y pruebas negativas
 
-Los 43 casos se mantienen en `test/scenarios.js`. `npm run artifacts` genera a partir de ellos la colección Postman y exporta los esquemas; así se evita documentar una secuencia distinta de la probada.
+Los 43 casos HTTP se describen en la colección Postman y se ejecutan tanto contra Spring Boot como contra la versión Express de referencia.
 
 La secuencia verifica autenticación, permisos de alta, datos inválidos, bicicleta, catálogos, cita, duplicado de cita, reprogramación, recepción, duplicado de orden, diagnóstico, propuesta, cálculo de precios, autorización, ejecución, sobrecostos, trabajo adicional rechazado, conservación de precios, revisión, entrega, valoración, garantía, historial, estadísticas y nueva recepción sin cita.
 

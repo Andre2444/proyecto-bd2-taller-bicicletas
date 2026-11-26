@@ -13,7 +13,7 @@ docker compose up -d
 .\mvnw.cmd spring-boot:run
 ```
 
-La API inicia en `http://127.0.0.1:3000/api` y MongoDB conserva sus datos en un volumen Docker. La primera vez que no existan usuarios, la aplicación crea un coordinador, técnico y cliente de demostración e imprime sus IDs y tokens en la terminal. Copia los valores a las variables del entorno local de Postman. Se muestran una sola vez; no compartas ni publiques esos tokens.
+La API inicia en `http://127.0.0.1:3000/api` y MongoDB conserva sus datos en un volumen Docker. La primera vez que no existan usuarios, Spring Boot crea un coordinador, técnico y cliente de demostración e imprime sus IDs y tokens en la terminal. Copia esos valores a las variables del entorno local de Postman. Se muestran una sola vez; no compartas ni publiques esos tokens.
 
 Importa `postman/BD2.postman_collection.json` y `postman/local.postman_environment.json`. Ejecuta los requests en orden con Collection Runner. Algunas respuestas 400, 403 y 409 son resultados esperados de las pruebas negativas.
 
@@ -46,7 +46,7 @@ El script inicia la aplicación y un replica set temporal, corre 43 solicitudes 
 ## Contenido
 
 - `src/main/`: API Spring Boot, conexión MongoDB, autenticación y errores.
-- `database/`: esquemas MongoDB, creación de colecciones y consultas de ejemplo.
+- `database/`: esquemas MongoDB y consultas de ejemplo.
 - `postman/`: colección de 43 pruebas y entorno sin credenciales.
 - `scripts/test-spring-postman.js`: ejecución repetible de Postman contra Spring Boot.
 - `src/` y `test/`: implementación Express previa y pruebas de referencia.
@@ -62,4 +62,3 @@ Los adjuntos se registran por nombre, descripción y ubicación. El enunciado no
 ## Documentación y repositorio
 
 Lee `docs/01-alcance-y-requisitos.md`, `02-modelado-base.md`, `03-implementacion.md`, `04-api.md`, `05-documentos-y-consultas.md`, `06-pruebas.md` y `07-sustentacion-y-entrega.md` en ese orden. Repositorio privado: [Andre2444/proyecto-bd2-taller-bicicletas](https://github.com/Andre2444/proyecto-bd2-taller-bicicletas). La documentación está en `docs/`; no se ha publicado como Wiki ni se han atribuido contribuciones ficticias a integrantes.
-

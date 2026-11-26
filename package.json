@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=22.9.0"
-  },
+  "engines": { "node": ">=22.9.0" },
   "scripts": {
     "start": "node --env-file-if-exists=.env src/server.js",
     "dev": "node --watch --env-file-if-exists=.env src/server.js",
@@ -14,8 +12,7 @@
     "demo": "node scripts/demo.js",
     "test": "node --test --test-concurrency=1 test/*.test.js",
     "test:postman": "node scripts/test-postman.js",
-    "test:spring": "node scripts/test-spring-postman.js",
-    "artifacts": "node scripts/generate-artifacts.js"
+    "test:spring": "node scripts/test-spring-postman.js"
   },
   "dependencies": {
     "express": "^5.1.0",

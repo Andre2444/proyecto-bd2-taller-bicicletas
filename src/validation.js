@@ -2,33 +2,168 @@ import { z } from 'zod';
 import { ObjectId } from 'mongodb';
 
 export const text = z.string().trim().min(1).max(4000);
-export const id = z.string().regex(/^[a-f\d]{24}$/i, 'ObjectId inválido').transform(v => new ObjectId(v));
-export const date = z.iso.datetime({ offset: true }).transform(v => new Date(v));
+export const id = z
+  .string()
+  .regex(/^[a-f\d]{24}$/i, 'ObjectId inválido')
+  .transform((v) => new ObjectId(v));
+export const date = z.iso.datetime({ offset: true }).transform((v) => new Date(v));
 export const money = z.number().int().nonnegative().max(1000000000);
 export const strings = z.array(text).max(100);
 export const file = z.object({ nombreArchivo: text, descripcion: text, ubicacion: text });
 export const files = z.array(file).max(50).default([]);
 export const roles = ['cliente', 'tecnico', 'coordinador'];
-export const estados = ['recibida', 'en diagnostico', 'pendiente de autorizacion', 'en ejecucion', 'lista para entrega', 'entregada', 'cancelada'];
-export const usuario = z.object({ nombreCompleto: text, documento: text, correo: z.email().transform(v => v.toLowerCase()), telefono: text, rol: z.enum(roles), direccion: text.optional() });
-export const bicicleta = z.object({ propietarioId: id, marca: text, modelo: text, tipo: z.enum(['urbana', 'ruta', 'montana', 'electrica']), color: text, numeroSerie: text.optional(), caracteristicas: z.object({ tamanoMarco: text.optional(), material: text.optional(), tamanoRueda: text.optional(), tipoFrenos: text.optional(), transmision: text.optional(), suspension: z.object({ informacion: text, recorrido: z.number().positive() }).optional(), bateria: z.object({ capacidadWh: z.number().positive(), voltajeV: z.number().positive() }).optional(), motor: z.object({ tipo: text, potenciaW: z.number().positive() }).optional() }).passthrough() });
-export const servicio = z.object({ nombre: text, categoria: z.enum(['mantenimiento preventivo', 'frenos', 'transmision', 'ruedas', 'suspension', 'componentes electricos']), descripcion: text, duracionEstimada: z.number().int().positive(), precioReferencia: money, tareasHabituales: z.array(z.object({ nombre: text, descripcion: text })), recomendacionesGenerales: strings });
+export const estados = [
+  'recibida',
+  'en diagnostico',
+  'pendiente de autorizacion',
+  'en ejecucion',
+  'lista para entrega',
+  'entregada',
+  'cancelada',
+];
+export const usuario = z.object({
+  nombreCompleto: text,
+  documento: text,
+  correo: z.email().transform((v) => v.toLowerCase()),
+  telefono: text,
+  rol: z.enum(roles),
+  direccion: text.optional(),
+});
+export const bicicleta = z.object({
+  propietarioId: id,
+  marca: text,
+  modelo: text,
+  tipo: z.enum(['urbana', 'ruta', 'montana', 'electrica']),
+  color: text,
+  numeroSerie: text.optional(),
+  caracteristicas: z
+    .object({
+      tamanoMarco: text.optional(),
+      material: text.optional(),
+      tamanoRueda: text.optional(),
+      tipoFrenos: text.optional(),
+      transmision: text.optional(),
+      suspension: z.object({ informacion: text, recorrido: z.number().positive() }).optional(),
+      bateria: z
+        .object({ capacidadWh: z.number().positive(), voltajeV: z.number().positive() })
+        .optional(),
+      motor: z.object({ tipo: text, potenciaW: z.number().positive() }).optional(),
+    })
+    .passthrough(),
+});
+export const servicio = z.object({
+  nombre: text,
+  categoria: z.enum([
+    'mantenimiento preventivo',
+    'frenos',
+    'transmision',
+    'ruedas',
+    'suspension',
+    'componentes electricos',
+  ]),
+  descripcion: text,
+  duracionEstimada: z.number().int().positive(),
+  precioReferencia: money,
+  tareasHabituales: z.array(z.object({ nombre: text, descripcion: text })),
+  recomendacionesGenerales: strings,
+});
 export const repuesto = z.object({ nombre: text, especificaciones: text, precio: money });
-export const cita = z.object({ clienteId: id, bicicletaId: id, fechaHora: date, motivo: text, problemasObservados: text, serviciosInteres: z.array(id).default([]) });
-export const cambioCita = z.object({ estado: z.enum(['solicitada', 'confirmada', 'cancelada']).optional(), fechaHora: date.optional(), observacionCambio: text });
-export const orden = z.object({ clienteId: id, bicicletaId: id, citaId: id.optional(), fechaEstimadaEntrega: date, tecnicosAsignados: z.array(id).min(1), recepcion: z.object({ problemaReportado: text, condicionesObservadas: text, accesorios: strings, fotografias: files }) });
-export const diagnostico = z.object({ hallazgos: z.array(z.object({ componente: text, condicion: text, descripcion: text, prioridad: z.enum(['baja', 'media', 'alta', 'critica']), observaciones: text, accionesRecomendadas: strings })).min(1), evidencias: files });
-export const previsto = z.object({ repuestoId: id, cantidad: z.number().int().positive(), precioUnitarioEstimado: money });
-export const trabajo = z.object({ servicioId: id.optional(), descripcionIntervencion: text, componente: text, manoObraEstimada: money, repuestosPrevistos: z.array(previsto).default([]), observaciones: text });
-export const decision = z.object({ decision: z.enum(['autorizado', 'rechazado']), comentarios: text });
-export const ejecucion = z.object({ estado: z.enum(['en ejecucion', 'finalizado']), descripcionRealizada: text, repuestosUtilizados: z.array(z.object({ repuestoId: id, cantidad: z.number().int().positive(), precioUnitarioAplicado: money })).default([]) });
-export const revision = z.object({ puntosVerificados: z.array(z.object({ punto: text, resultado: text })).min(1), resultado: text, aprobada: z.boolean(), recomendaciones: strings });
-export const garantia = z.object({ duracion: z.number().int().positive().max(3650), fechaInicio: date, condiciones: text, exclusiones: text });
+export const cita = z.object({
+  clienteId: id,
+  bicicletaId: id,
+  fechaHora: date,
+  motivo: text,
+  problemasObservados: z.string().trim().max(4000).default('Sin observaciones'),
+  serviciosInteres: z.array(id).default([]),
+});
+export const cambioCita = z.object({
+  estado: z.enum(['solicitada', 'confirmada', 'cancelada']).optional(),
+  fechaHora: date.optional(),
+  observacionCambio: text,
+});
+export const orden = z.object({
+  clienteId: id,
+  bicicletaId: id,
+  citaId: id.optional(),
+  fechaEstimadaEntrega: date,
+  tecnicosAsignados: z.array(id).min(1),
+  recepcion: z.object({
+    problemaReportado: text,
+    condicionesObservadas: text,
+    accesorios: strings,
+    fotografias: files,
+  }),
+});
+export const diagnostico = z.object({
+  hallazgos: z
+    .array(
+      z.object({
+        componente: text,
+        condicion: text,
+        descripcion: text,
+        prioridad: z.enum(['baja', 'media', 'alta', 'critica']),
+        observaciones: text,
+        accionesRecomendadas: strings,
+      }),
+    )
+    .min(1),
+  evidencias: files,
+});
+export const previsto = z.object({
+  repuestoId: id,
+  cantidad: z.number().int().positive(),
+  precioUnitarioEstimado: money,
+});
+export const trabajo = z.object({
+  servicioId: id.optional(),
+  descripcionIntervencion: text,
+  componente: text,
+  manoObraEstimada: money,
+  repuestosPrevistos: z.array(previsto).default([]),
+  observaciones: text,
+});
+export const decision = z.object({
+  decision: z.enum(['autorizado', 'rechazado']),
+  comentarios: text,
+});
+export const ejecucion = z.object({
+  estado: z.enum(['en ejecucion', 'finalizado']),
+  descripcionRealizada: text,
+  repuestosUtilizados: z
+    .array(
+      z.object({
+        repuestoId: id,
+        cantidad: z.number().int().positive(),
+        precioUnitarioAplicado: money,
+      }),
+    )
+    .default([]),
+});
+export const revision = z.object({
+  puntosVerificados: z.array(z.object({ punto: text, resultado: text })).min(1),
+  resultado: text,
+  aprobada: z.boolean(),
+  recomendaciones: strings,
+});
+export const garantia = z.object({
+  duracion: z.number().int().positive().max(3650),
+  fechaInicio: date,
+  condiciones: text,
+  exclusiones: text,
+});
 export const solicitud = z.object({ trabajoId: id, descripcion: text, evidencias: files });
-export const resolver = z.object({ estado: z.enum(['en revision', 'resuelta', 'rechazada']), procede: z.boolean(), solucionAplicada: text });
-export const valoracion = z.object({ calificacion: z.number().int().min(1).max(5), comentarios: text, sugerencias: text });
+export const resolver = z.object({
+  estado: z.enum(['en revision', 'resuelta', 'rechazada']),
+  procede: z.boolean(),
+  solucionAplicada: text,
+});
+export const valoracion = z.object({
+  calificacion: z.number().int().min(1).max(5),
+  comentarios: text,
+  sugerencias: text,
+});
 export const parse = (schema, body) => schema.parse(body);
-export const objectId = value => id.parse(value);
+export const objectId = (value) => id.parse(value);
 export const asignacion = z.object({ tecnicosAsignados: z.array(id).min(1) });
 export const cambioEstado = z.object({ estado: z.enum(estados), observacion: text });
 export const entrega = z.object({ confirmacionRecepcionCliente: z.literal(true) });

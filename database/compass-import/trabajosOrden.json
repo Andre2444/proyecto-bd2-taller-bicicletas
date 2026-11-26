@@ -1,0 +1,131 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae427"
+    },
+    "descripcionIntervencion": "Cambiar pastillas y ajustar freno",
+    "componente": "Freno delantero",
+    "manoObraEstimada": {
+      "$numberInt": "30000"
+    },
+    "repuestosPrevistos": [
+      {
+        "repuestoId": {
+          "$oid": "6b0799a7bde65496bbbae422"
+        },
+        "cantidad": {
+          "$numberInt": "2"
+        },
+        "precioUnitarioEstimado": {
+          "$numberInt": "20000"
+        },
+        "nombre": "Pastillas",
+        "especificaciones": "Compatibles con freno de disco"
+      }
+    ],
+    "observaciones": "Presupuesto sujeto a autorización",
+    "servicio": {
+      "servicioId": {
+        "$oid": "6b0799a7bde65496bbbae421"
+      },
+      "nombre": "Ajuste de frenos",
+      "descripcion": "Ajuste y revisión de frenado",
+      "precioReferencia": {
+        "$numberInt": "30000"
+      }
+    },
+    "ordenId": {
+      "$oid": "6b0799a7bde65496bbbae425"
+    },
+    "autorizacion": {
+      "decision": "autorizado",
+      "comentarios": "Acepto presupuesto",
+      "fecha": {
+        "$date": {
+          "$numberLong": "1795660199292"
+        }
+      }
+    },
+    "ejecucion": {
+      "estado": "finalizado",
+      "descripcionRealizada": "Pastillas sustituidas y freno ajustado",
+      "repuestosUtilizados": [
+        {
+          "repuestoId": {
+            "$oid": "6b0799a7bde65496bbbae422"
+          },
+          "cantidad": {
+            "$numberInt": "2"
+          },
+          "precioUnitarioAplicado": {
+            "$numberInt": "19000"
+          },
+          "nombre": "Pastillas",
+          "especificaciones": "Compatibles con freno de disco"
+        }
+      ],
+      "fechaInicio": {
+        "$date": {
+          "$numberLong": "1795660199314"
+        }
+      },
+      "fechaFinalizacion": {
+        "$date": {
+          "$numberLong": "1795660199359"
+        }
+      }
+    },
+    "tecnicoId": {
+      "$oid": "6b07b652b8029fd1ee0999a5"
+    },
+    "revision": {
+      "puntosVerificados": [
+        {
+          "punto": "Frenado",
+          "resultado": "Correcto"
+        }
+      ],
+      "resultado": "Prueba superada",
+      "aprobada": true,
+      "recomendaciones": [
+        "Revisar periódicamente"
+      ]
+    },
+    "garantia": {
+      "duracion": {
+        "$numberInt": "30"
+      },
+      "fechaInicio": {
+        "$date": {
+          "$numberLong": "1795660199502"
+        }
+      },
+      "condiciones": "Defectos del servicio aplicado",
+      "exclusiones": "Golpes y desgaste normal"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae428"
+    },
+    "descripcionIntervencion": "Ajustar transmisión",
+    "componente": "Cambio trasero",
+    "manoObraEstimada": {
+      "$numberInt": "15000"
+    },
+    "repuestosPrevistos": [],
+    "observaciones": "Intervención adicional requiere decisión",
+    "ordenId": {
+      "$oid": "6b0799a7bde65496bbbae425"
+    },
+    "autorizacion": {
+      "decision": "rechazado",
+      "comentarios": "Lo haré en otra visita",
+      "fecha": {
+        "$date": {
+          "$numberLong": "1795660199388"
+        }
+      }
+    }
+  }
+]

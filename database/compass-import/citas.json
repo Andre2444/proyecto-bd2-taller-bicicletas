@@ -1,0 +1,50 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae423"
+    },
+    "clienteId": {
+      "$oid": "6b07b652b8029fd1ee0999a6"
+    },
+    "bicicletaId": {
+      "$oid": "6b0799a7bde65496bbbae420"
+    },
+    "fechaHora": {
+      "$date": {
+        "$numberLong": "1795832998960"
+      }
+    },
+    "motivo": "Revisar frenos",
+    "problemasObservados": "Ruido al frenar",
+    "serviciosInteres": [
+      {
+        "$oid": "6b0799a7bde65496bbbae421"
+      }
+    ],
+    "estado": "atendida",
+    "cambiosHorario": [
+      {
+        "anterior": {
+          "$date": {
+            "$numberLong": "1795746598958"
+          }
+        },
+        "nueva": {
+          "$date": {
+            "$numberLong": "1795832998960"
+          }
+        },
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199176"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a4"
+        },
+        "observacion": "Disponibilidad confirmada por coordinador"
+      }
+    ],
+    "observacionCambio": "Disponibilidad confirmada por coordinador"
+  }
+]

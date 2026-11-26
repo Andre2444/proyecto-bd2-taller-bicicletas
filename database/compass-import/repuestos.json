@@ -1,0 +1,12 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae422"
+    },
+    "nombre": "Pastillas nuevo catálogo",
+    "especificaciones": "Compatibles con freno de disco",
+    "precio": {
+      "$numberInt": "50000"
+    }
+  }
+]

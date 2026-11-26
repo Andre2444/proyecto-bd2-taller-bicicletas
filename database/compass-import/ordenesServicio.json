@@ -1,0 +1,277 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae425"
+    },
+    "clienteId": {
+      "$oid": "6b07b652b8029fd1ee0999a6"
+    },
+    "citaId": {
+      "$oid": "6b0799a7bde65496bbbae423"
+    },
+    "fechaEstimadaEntrega": {
+      "$date": {
+        "$numberLong": "1796264998960"
+      }
+    },
+    "tecnicosAsignados": [
+      {
+        "$oid": "6b07b652b8029fd1ee0999a5"
+      }
+    ],
+    "recepcion": {
+      "problemaReportado": "Ruido al frenar",
+      "condicionesObservadas": "Desgaste de pastillas",
+      "accesorios": [
+        "Luz delantera"
+      ],
+      "fotografias": [
+        {
+          "nombreArchivo": "freno.jpg",
+          "descripcion": "Estado inicial del freno",
+          "ubicacion": "/evidencias/freno.jpg"
+        }
+      ]
+    },
+    "bicicleta": {
+      "bicicletaId": {
+        "$oid": "6b0799a7bde65496bbbae420"
+      },
+      "marca": "Trek",
+      "modelo": "Marlin",
+      "tipo": "montana",
+      "color": "Azul",
+      "caracteristicas": {
+        "material": "Aluminio",
+        "suspension": {
+          "informacion": "Delantera",
+          "recorrido": {
+            "$numberInt": "100"
+          }
+        }
+      }
+    },
+    "coordinadorId": {
+      "$oid": "6b07b652b8029fd1ee0999a4"
+    },
+    "fechaRecepcion": {
+      "$date": {
+        "$numberLong": "1795660199196"
+      }
+    },
+    "estado": "entregada",
+    "version": {
+      "$numberInt": "12"
+    },
+    "historialEstados": [
+      {
+        "estado": "recibida",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199196"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a4"
+        },
+        "observacion": "Recepción de bicicleta"
+      },
+      {
+        "estado": "en diagnostico",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199229"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a5"
+        },
+        "observacion": "Registro de hallazgos"
+      },
+      {
+        "estado": "pendiente de autorizacion",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199249"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a5"
+        },
+        "observacion": "Trabajo propuesto para autorización"
+      },
+      {
+        "estado": "en ejecucion",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199315"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a5"
+        },
+        "observacion": "Inicio de trabajo autorizado"
+      },
+      {
+        "estado": "lista para entrega",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199488"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a4"
+        },
+        "observacion": "Revisión aprobada"
+      },
+      {
+        "estado": "entregada",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199503"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a4"
+        },
+        "observacion": "Recepción confirmada por el cliente"
+      }
+    ],
+    "diagnostico": {
+      "hallazgos": [
+        {
+          "componente": "Freno delantero",
+          "condicion": "Desgastado",
+          "descripcion": "Pastillas agotadas",
+          "prioridad": "alta",
+          "observaciones": "Requiere sustitución",
+          "accionesRecomendadas": [
+            "Cambiar pastillas"
+          ],
+          "tecnicoId": {
+            "$oid": "6b07b652b8029fd1ee0999a5"
+          }
+        }
+      ],
+      "evidencias": [
+        {
+          "nombreArchivo": "diagnostico.jpg",
+          "descripcion": "Desgaste encontrado",
+          "ubicacion": "/evidencias/diagnostico.jpg"
+        }
+      ]
+    },
+    "revisionEntrega": {
+      "puntosVerificados": [
+        {
+          "punto": "Frenado",
+          "resultado": "Correcto"
+        },
+        {
+          "punto": "Accesorios",
+          "resultado": "Completos"
+        }
+      ],
+      "resultado": "Bicicleta revisada",
+      "aprobada": true,
+      "recomendaciones": [
+        "Revisar desgaste mensualmente"
+      ]
+    },
+    "entrega": {
+      "confirmacionRecepcionCliente": true,
+      "fecha": {
+        "$date": {
+          "$numberLong": "1795660199502"
+        }
+      }
+    },
+    "valoracionServicio": {
+      "calificacion": {
+        "$numberInt": "5"
+      },
+      "comentarios": "Buen servicio",
+      "sugerencias": "Conservar la atención"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae42a"
+    },
+    "clienteId": {
+      "$oid": "6b07b652b8029fd1ee0999a6"
+    },
+    "fechaEstimadaEntrega": {
+      "$date": {
+        "$numberLong": "1796264998960"
+      }
+    },
+    "tecnicosAsignados": [
+      {
+        "$oid": "6b07b652b8029fd1ee0999a5"
+      }
+    ],
+    "recepcion": {
+      "problemaReportado": "Nueva revisión",
+      "condicionesObservadas": "Uso habitual",
+      "accesorios": [],
+      "fotografias": []
+    },
+    "bicicleta": {
+      "bicicletaId": {
+        "$oid": "6b0799a7bde65496bbbae420"
+      },
+      "marca": "Trek",
+      "modelo": "Marlin",
+      "tipo": "montana",
+      "color": "Azul",
+      "caracteristicas": {
+        "material": "Aluminio",
+        "suspension": {
+          "informacion": "Delantera",
+          "recorrido": {
+            "$numberInt": "100"
+          }
+        }
+      }
+    },
+    "coordinadorId": {
+      "$oid": "6b07b652b8029fd1ee0999a4"
+    },
+    "fechaRecepcion": {
+      "$date": {
+        "$numberLong": "1795660199640"
+      }
+    },
+    "estado": "cancelada",
+    "version": {
+      "$numberInt": "1"
+    },
+    "historialEstados": [
+      {
+        "estado": "recibida",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199640"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a4"
+        },
+        "observacion": "Recepción de bicicleta"
+      },
+      {
+        "estado": "cancelada",
+        "fecha": {
+          "$date": {
+            "$numberLong": "1795660199653"
+          }
+        },
+        "usuarioId": {
+          "$oid": "6b07b652b8029fd1ee0999a4"
+        },
+        "observacion": "Cliente desiste antes del diagnóstico"
+      }
+    ]
+  }
+]

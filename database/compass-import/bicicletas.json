@@ -1,0 +1,23 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae420"
+    },
+    "propietarioId": {
+      "$oid": "6b07b652b8029fd1ee0999a6"
+    },
+    "marca": "Trek",
+    "modelo": "Marlin",
+    "tipo": "montana",
+    "color": "Azul",
+    "caracteristicas": {
+      "material": "Aluminio",
+      "suspension": {
+        "informacion": "Delantera",
+        "recorrido": {
+          "$numberInt": "100"
+        }
+      }
+    }
+  }
+]

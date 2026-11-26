@@ -1,0 +1,25 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae421"
+    },
+    "nombre": "Ajuste de frenos",
+    "categoria": "frenos",
+    "descripcion": "Ajuste y revisión de frenado",
+    "duracionEstimada": {
+      "$numberInt": "45"
+    },
+    "precioReferencia": {
+      "$numberInt": "30000"
+    },
+    "tareasHabituales": [
+      {
+        "nombre": "Ajustar",
+        "descripcion": "Regular tensión"
+      }
+    ],
+    "recomendacionesGenerales": [
+      "Revisar desgaste"
+    ]
+  }
+]

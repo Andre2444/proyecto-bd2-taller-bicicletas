@@ -1,0 +1,34 @@
+[
+  {
+    "_id": {
+      "$oid": "6b0799a7bde65496bbbae429"
+    },
+    "trabajoId": {
+      "$oid": "6b0799a7bde65496bbbae427"
+    },
+    "descripcion": "Reapareció ruido",
+    "evidencias": [
+      {
+        "nombreArchivo": "ruido.txt",
+        "descripcion": "Descripción del inconveniente",
+        "ubicacion": "/evidencias/ruido.txt"
+      }
+    ],
+    "fecha": {
+      "$date": {
+        "$numberLong": "1795660199554"
+      }
+    },
+    "estado": "resuelta",
+    "procede": true,
+    "revisadaEn": {
+      "$date": {
+        "$numberLong": "1795660199574"
+      }
+    },
+    "revisadoPorId": {
+      "$oid": "6b07b652b8029fd1ee0999a4"
+    },
+    "solucionAplicada": "Ajuste de asentamiento realizado"
+  }
+]

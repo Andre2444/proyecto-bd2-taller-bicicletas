@@ -1,0 +1,21 @@
+
+
+1. Servicios propuestos y valor estimado
+db.trabajosOrden.aggregate([
+ {$match:{'servicio.servicioId':{$exists:true}}},
+ {$project:{servicioId:'$servicio.servicioId',nombre:'$servicio.nombre',decision:'$autorizacion.decision',subtotal:{$add:['$manoObraEstimada',{$sum:{$map:{input:{$ifNull:['$repuestosPrevistos',[]]},as:'r',in:{$multiply:['$$r.cantidad','$$r.precioUnitarioEstimado']}}}}]}}},
+ {$group:{_id:'$servicioId',servicio:{$first:'$nombre'},propuestas:{$sum:1},autorizados:{$sum:{$cond:[{$eq:['$decision','autorizado']},1,0]}},valorPropuestoCOP:{$sum:'$subtotal'}}},
+ {$sort:{propuestas:-1,servicio:1}}
+]).toArray();
+
+2. Órdenes por tipo de bicicleta y estado
+db.ordenesServicio.aggregate([{$group:{_id:{tipo:'$bicicleta.tipo',estado:'$estado'},cantidad:{$sum:1}}},{$sort:{'_id.tipo':1,'_id.estado':1}}]).toArray();
+
+3. Calificación por tipo de bicicleta
+db.ordenesServicio.aggregate([{$match:{'valoracionServicio.calificacion':{$exists:true}}},{$group:{_id:'$bicicleta.tipo',ordenesValoradas:{$sum:1},promedio:{$avg:'$valoracionServicio.calificacion'},minimo:{$min:'$valoracionServicio.calificacion'},maximo:{$max:'$valoracionServicio.calificacion'}}},{$sort:{_id:1}}]).toArray();
+
+4. Tiempo de atención por mes
+db.ordenesServicio.aggregate([{$match:{estado:'entregada','entrega.fecha':{$type:'date'}}},{$project:{mes:{$dateToString:{format:'%Y-%m',date:'$entrega.fecha'}},horas:{$divide:[{$subtract:['$entrega.fecha','$fechaRecepcion']},3600000]}}},{$group:{_id:'$mes',entregadas:{$sum:1},promedioHoras:{$avg:'$horas'},maximoHoras:{$max:'$horas'}}},{$sort:{_id:1}}]).toArray();
+
+5. Solicitudes de garantía y valor de trabajos relacionados
+db.solicitudesGarantia.aggregate([{$lookup:{from:'trabajosOrden',localField:'trabajoId',foreignField:'_id',as:'trabajo'}},{$unwind:'$trabajo'},{$project:{estado:1,subtotal:{$add:['$trabajo.manoObraEstimada',{$sum:{$map:{input:{$ifNull:['$trabajo.repuestosPrevistos',[]]},as:'r',in:{$multiply:['$$r.cantidad','$$r.precioUnitarioEstimado']}}}}]}}},{$group:{_id:'$estado',solicitudes:{$sum:1},valorTrabajosCOP:{$sum:'$subtotal'}}},{$sort:{_id:1}}]).toArray();
